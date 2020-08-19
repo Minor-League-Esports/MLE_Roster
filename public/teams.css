@@ -1,0 +1,545 @@
+.aviators {
+    --home-primary: #006847;
+    --home-accent: #b7b7b7;
+
+    --away-primary: #b7b7b7;
+    --away-secondary: #006847;
+
+    --alt-primary: #333739;
+    --alt-accent: #005d00;
+
+    --team-url: url("/img/teams/Aviators.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+}
+
+.bears {
+    --home-primary: #62b6fe;
+    --home-accent: #030029;
+
+    --away-primary: #030029;
+    --away-secondary: #62b6fe;
+
+    --alt-primary: #333739;
+    --alt-accent: #307dfa;
+
+    --team-url: url("/img/teams/Bears.png");
+
+    --background-color: var(--home-accent);
+    --color: var(--home-primary);
+
+}
+
+.blizzard {
+    --home-primary: #385470;
+    --home-accent: #a3bad2;
+
+    --away-primary: #bebfbe;
+    --away-secondary: #bebfbe;
+
+    --alt-primary: #333739;
+    --alt-accent: #3283fb;
+
+    --team-url: url("/img/teams/Blizzard.png");
+
+    --background-color: var(--alt-primary);
+    --color: var(--home-accent);
+
+}
+
+.bulls {
+    --home-primary: #ce1126;
+    --home-accent: #111111;
+
+    --away-primary: #333739;
+    --away-secondary: #ce1126;
+
+    --alt-primary: #dadee0;
+    --alt-accent: #fa0000;
+
+    --team-url: url("/img/teams/Bulls.png");
+
+    --background-color: var(--alt-primary);
+    --color: var(--alt-accent);
+
+}
+
+.comets {
+    --home-primary: #2db4e3;
+    --home-accent: #f6518d;
+
+    --away-primary: #f6518d;
+    --away-secondary: #2db4e3;
+
+    --alt-primary: #333739;
+    --alt-accent: #f204a2;
+
+    --team-url: url("/img/teams/Comets.png");
+
+    --background-color: var(--alt-primary);
+    --color: var(--alt-accent);
+}
+
+.demolition {
+    --home-primary: #0e9547;
+    --home-accent: #fde022;
+
+    --away-primary: #fde022;
+    --away-secondary: #0e9547;
+
+    --alt-primary: #333739;
+    --alt-accent: #78f641;
+
+    --team-url: url("/img/teams/Demo.png");
+
+    --background-color: var(--alt-primary);
+    --color: var(--home-accent);
+}
+
+.dodgers {
+    --home-primary: #041e42;
+    --home-accent: #e7e9ea;
+
+    --away-primary: #e7e9ea;
+    --away-secondary: #041e42;
+
+    --alt-primary: #071876;
+    --alt-accent: #656665;
+
+    --team-url: url("/img/teams/Dodgers.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+}
+
+.ducks {
+    --home-primary: #00788c;
+    --home-accent: #ffd100;
+
+    --away-primary: #ffd100;
+    --away-secondary: #00788c;
+
+    --alt-primary: #b9bbbd;
+    --alt-accent: #f39a00;
+
+    --team-url: url("/img/teams/Ducks.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--alt-primary);
+}
+
+.eclipse {
+    --home-primary: #261447;
+    --home-accent: #ff6c11;
+
+    --away-primary: #ff6c11;
+    --away-secondary: #261447;
+
+    --alt-primary: #dedfe2;
+    --alt-accent: #4e0e71;
+
+    --team-url: url("/img/teams/Eclipse.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+
+}
+
+.elite {
+    --home-primary: #572a84;
+    --home-accent: #ea9300;
+
+    --away-primary: #ea9300;
+    --away-secondary: #572a84;
+
+    --alt-primary: #949597;
+    --alt-accent: #7831fa;
+
+    --team-url: url("/img/teams/Elite.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+
+}
+
+.express {
+    --home-primary: #00254c;
+    --home-accent: #eeb311;
+
+    --away-primary: #eeb311;
+    --away-secondary: #00254c;
+
+    --alt-primary: #969897;
+    --alt-accent: #053272;
+
+    --team-url: url("/img/teams/Express.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+}
+
+.flames {
+    --home-primary: #c92a06;
+    --home-accent: #f6c432;
+
+    --away-primary: #f6c432;
+    --away-secondary: #c92a06;
+
+    --alt-primary: #b8babb;
+    --alt-accent: #a92b00;
+
+    --team-url: url("/img/teams/Flames.png");
+
+    --background-color: var(--alt-accent);
+    --color: var(--home-accent);
+}
+
+.foxes {
+    --home-primary: #ea6409;
+    --home-accent: #ffffff;
+
+    --away-primary: #ffffff;
+    --away-secondary: #ea6409;
+
+    --alt-primary: #333739;
+    --alt-accent: #e95f30;
+
+    --team-url: url("/img/teams/Foxes.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+}
+
+.hawks {
+    --home-primary: #c30000;
+    --home-accent: #0199b5;
+
+    --away-primary: #0199b5;
+    --away-secondary: #c30000;
+
+    --alt-primary: #bbbdbb;
+    --alt-accent: #0090af;
+
+    --background-color: var(--home-primary);
+    --color: var(--alt-primary);
+
+    --team-url: url("/img/teams/Hawks.png");
+
+}
+
+.hive {
+    --home-primary: #f5b900;
+    --home-accent: #111111;
+
+    --away-primary: #333739;
+    --away-secondary: #f5b900;
+
+    --alt-primary: #333739;
+    --alt-accent: #ef5656;
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+
+    --team-url: url("/img/teams/Hive.png");
+
+}
+
+.hurricanes {
+    --home-primary: #005030;
+    --home-accent: #f47321;
+
+    --away-primary: #f47321;
+    --away-secondary: #005030;
+
+    --alt-primary: #bfbfbf;
+    --alt-accent: #006400;
+
+    --team-url: url("/img/teams/Hurricanes.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+
+}
+
+.jets {
+    --home-primary: #0a2b58;
+    --home-accent: #c7102e;
+
+    --away-primary: #c7102e;
+    --away-secondary: #0a2b58;
+
+    --alt-primary: #dfe1e2;
+    --alt-accent: #f8002a;
+
+    --team-url: url("/img/teams/Jets.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+}
+
+.knights {
+    --home-primary: #b20000;
+    --home-accent: #8e8e8e;
+
+    --away-primary: #8e8e8e;
+    --away-secondary: #b20000;
+
+    --alt-primary: #333739;
+    --alt-accent: #ae0000;
+
+    --team-url: url("/img/teams/Knights.png");
+
+    --background-color: var(--alt-primary);
+    --color: var(--home-primary);
+
+}
+
+.lightning {
+    --home-primary: #002868;
+    --home-accent: #ffffff;
+
+    --away-primary: #ffffff;
+    --away-secondary: #002868;
+
+    --alt-primary: #333739;
+    --alt-accent: #002664;
+
+    --team-url: url("/img/teams/Lightning.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+}
+
+.outlaws {
+    --home-primary: #981821;
+    --home-accent: #231c09;
+
+    --away-primary: #333739;
+    --away-secondary: #981821;
+
+    --alt-primary: #dedfe2;
+    --alt-accent: #231c09;
+
+    --team-url: url("/img/teams/Outlaws.png");
+
+    --background-color: var(--home-accent);
+    --color: var(--home-primary);
+}
+
+.pandas {
+    --home-primary: #006100;
+    --home-accent: #111111;
+
+    --away-primary: #333739;
+    --away-secondary: #006100;
+
+    --alt-primary: #ffffff;
+    --alt-accent: #111111;
+
+    --team-url: url("/img/teams/Pandas.png");
+
+    --color: var(--home-primary);
+    --background-color: var(--home-accent);
+
+}
+
+.pirates {
+    --home-primary: #333739;
+    --home-accent: #ffffff;
+
+    --away-primary: #ffffff;
+    --away-secondary: #111111;
+
+    --alt-primary: #fff200;
+    --alt-accent: #111111;
+
+    --team-url: url("/img/teams/Pirates.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+
+}
+
+.puffins {
+    --home-primary: #ec2c0d;
+    --home-accent: #9bf9ff;
+
+    --away-primary: #9bf9ff;
+    --away-secondary: #ec2c0d;
+
+    --alt-primary: #00cbf7;
+    --alt-accent: #dbdfe0;
+
+    --team-url: url("/img/teams/Puffins.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+
+}
+
+.rhinos {
+    --home-primary: #7d7d7d;
+    --home-accent: #d9d9d9;
+
+    --away-primary: #d9d9d9;
+    --away-secondary: #7d7d7d;
+
+    --alt-primary: #333739;
+    --alt-accent: #daf656;
+
+    --team-url: url("/img/teams/Rhinos.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+}
+
+.sabres {
+    --home-primary: #f36a22;
+    --home-accent: #111111;
+
+    --away-primary: #333739;
+    --away-secondary: #f36a22;
+
+    --alt-primary: #f83e00;
+    --alt-accent: #ed7d56;
+
+    --team-url: url("/img/teams/Sabres.png");
+
+    --background-color: var(--home-accent);
+    --color: var(--home-primary);
+
+}
+
+.shadow {
+    --home-primary: #333739;
+    --home-accent: #d3bc8d;
+
+    --away-primary: #d3bc8d;
+    --away-secondary: #161008;
+
+    --alt-primary: #333739;
+    --alt-accent: #242525;
+
+    --team-url: url("/img/teams/shadow.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+
+}
+
+.sharks {
+    --home-primary: #329393;
+    --home-accent: #f36a24;
+
+    --away-primary: #f36a24;
+    --away-secondary: #329393;
+
+    --alt-primary: #005264;
+    --alt-accent: #ef3d00;
+
+    --team-url: url("/img/teams/Sharks.png");
+
+    --background-color: var(--alt-primary);
+    --color: var(--home-accent);
+
+}
+
+.spartans {
+    --home-primary: #7b1515;
+    --home-accent: #ffb612;
+
+    --away-primary: #ffb612;
+    --away-secondary: #7b1515;
+
+    --alt-primary: #bdbebd;
+    --alt-accent: #610102;
+
+    --team-url: url("/img/teams/Spartans.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+}
+
+.spectre {
+    --home-primary: #58427c;
+    --home-accent: #4dcf74;
+
+    --away-primary: #4dcf74;
+    --away-secondary: #58427c;
+
+    --alt-primary: #e4e4e4;
+    --alt-accent: #00f764;
+
+    --team-url: url("/img/teams/Spectre.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+
+}
+
+.tyrants {
+    --home-primary: #98012e;
+    --home-accent: #c4a87d;
+
+    --away-primary: #c4a87d;
+    --away-secondary: #98012e;
+
+    --alt-primary: #fa7d91;
+    --alt-accent: #5f0446;
+
+    --team-url: url("/img/teams/Tyrants.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+
+}
+
+.wizards {
+    --home-primary: #0066b2;
+    --home-accent: #fdb927;
+
+    --away-primary: #fdb927;
+    --away-secondary: #0066b2;
+
+    --alt-primary: #646564;
+    --alt-accent: #005efa;
+
+    --team-url: url("/img/teams/Wizards.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+
+}
+
+.wolves {
+    --home-primary: #8ebae3;
+    --home-accent: #221c35;
+
+    --away-primary: #221c35;
+    --away-secondary: #8ebae3;
+
+    --alt-primary: #005efa;
+    --alt-accent: #01ac11;
+
+    --team-url: url("/img/teams/Wolves.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+}
+
+.fa {
+    --home-primary: #2a4b82;
+    --home-accent: #F3F2F2;
+
+    --away-primary: #F3F2F2;
+    --away-secondary: #2a4b82;
+
+    --alt-primary: #2C313B;
+    --alt-accent: #2a4b82;
+
+    --team-url: url("/img/MLE_Primary@2x.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+}
