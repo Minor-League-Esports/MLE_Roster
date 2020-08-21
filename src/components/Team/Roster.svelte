@@ -3,27 +3,40 @@
     import {link} from "svelte-routing";
     import {SalaryCapByLeague} from "../../helpers/MLE_META";
     import {sortLeaguesInOrder} from "../../helpers/MLE_META";
+    import {getPlayers} from "../Players/playersHelpers";
+    import {getContext, onMount} from "svelte";
 
     export let team;
+    const firestore = getContext("firebase").getFirebase().firestore();
+    let players = false;
+    onMount(async () => {
+        players = (await getPlayers(firestore)).reduce((o, v) => {
+            o[v.PLAYERS.MLEID] = v;
+            return o;
+        }, {});
+    })
 
     let players_by_league = {};
     $: {
-        players_by_league = {};
-        team.players.forEach(player => {
-            if (!players_by_league.hasOwnProperty(player.League))
-                players_by_league[player.League] = [];
-            players_by_league[player.League].push(player);
-        });
-        players_by_league = players_by_league;
+        if (players) {
+            players_by_league = {};
+            team.players.forEach(playerId => {
+                let player = players[playerId.id];
+                if (!players_by_league.hasOwnProperty(player.PLAYERS.League))
+                    players_by_league[player.PLAYERS.League] = [];
+                players_by_league[player.PLAYERS.League].push(player);
+            });
+            players_by_league = players_by_league;
+        }
     }
     let totals = {}
     const getSalaryTotal = (league) => {
         if (!Object.keys(totals).includes(league))
             totals[league] = players_by_league[league]
-                    .filter(p => !p.Role.includes("Reserve"))
-                    .reduce((acc, p) =>
-                            acc + parseFloat(p.Salary)
-                            , 0)
+                .filter(p => !p.PLAYERS.Role.includes("Reserve"))
+                .reduce((acc, p) =>
+                    acc + parseFloat(p.SALARY.Salary)
+                    , 0)
         return totals[league];
     }
     const getSalaryOffset = (league) => {
@@ -75,7 +88,7 @@
         </dl>
     </Tile>
     {#each Object.keys(players_by_league).sort(sortLeaguesInOrder) as league}
-        {#if players_by_league[league].filter(p => p.Role.length).length > 0}
+        {#if players_by_league[league].filter(p => p.PLAYERS.Role.length).length > 0}
             <Tile width="1-1" style="primary" class="uk-width-1-2@s uk-width-1-1@l uk-padding-small">
                 <h3>
                     {league}<br class="uk-hidden@m"/>({ getSalaryTotal(league) } | { getSalaryOffset(league)}) </h3>
@@ -83,11 +96,11 @@
                     <li>
                         <h4>Starters</h4>
                     </li>
-                    {#each players_by_league[league].filter(p => p.Role.includes("Player")) as player}
+                    {#each players_by_league[league].filter(p => p.PLAYERS.Role.includes("Player")) as player}
                         <li>
-                            <a href="/player/{player.MLEID}" use:link>
+                            <a href="/player/{player.PLAYERS.MLEID}" use:link>
                                 <Button style="text">
-                                    {player.Player} ({player.Salary})
+                                    {player.PLAYERS.Player} ({player.SALARY.Salary})
                                 </Button>
                             </a>
                         </li>
@@ -96,11 +109,11 @@
                     <li>
                         <h4>Reserve</h4>
                     </li>
-                    {#each players_by_league[league].filter(p => p.Role.includes("Reserve")) as player}
+                    {#each players_by_league[league].filter(p => p.PLAYERS.Role.includes("Reserve")) as player}
                         <li>
-                            <a href="/player/{player.MLEID}" use:link>
+                            <a href="/player/{player.PLAYERS.MLEID}" use:link>
                                 <Button style="text">
-                                    {player.Player} ({player.Salary})
+                                    {player.PLAYERS.Player} ({player.SALARY.Salary})
                                 </Button>
                             </a>
                         </li>

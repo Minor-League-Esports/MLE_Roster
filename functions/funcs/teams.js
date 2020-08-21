@@ -18,8 +18,9 @@ const assignRosters = (players) => {
             team.players = [];
         }
         if (!team.players) team.players = [];
-        team.players.push(player.PLAYERS)
-        team.players[team.players.length - 1].Salary = player.SALARY.Salary;
+
+        team.players.push(firestore.doc(`players/${player.PLAYERS.MLEID}`));
+
     });
     return teams;
 }
