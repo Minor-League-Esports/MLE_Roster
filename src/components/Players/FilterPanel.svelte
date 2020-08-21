@@ -29,9 +29,9 @@
     }
 
     function forceRange(v, min, max) {
-        if (v < min) return min;
-        if (v > max) return max;
-        return v;
+        if (v < min) return min.toFixed(1);
+        if (v > max) return max.toFixed(1);
+        return v.toFixed(1);
     }
 
 </script>
@@ -93,10 +93,11 @@
                     <optgroup>
                         <option value="">All Teams</option>
                         <option value="FA">Free Agents</option>
+                        <option value="Waivers">Waiver Players</option>
                     </optgroup>
                     <optgroup label="Franchises">
                         {#each teams as team (team)}
-                            {#if team !== "FA" && team !== "#N/A"}
+                            {#if team !== "FA" && team !== "#N/A" && team !== "Waviers"}
                                 <option value="{team}">{team}</option>
                             {/if}
                         {/each}

@@ -13,4 +13,25 @@ export const rankTierLookup = [
     "Diamond 1", "Diamond 2", "Diamond 3",
     "Champion 1", "Champion 2", "Champion 3",
     "Grand Champion"
+];
+
+const leaguesInOrder = [
+    "premier",
+    "master",
+    "champion",
+    "academy",
+    "foundation",
+    "combined"
 ]
+export const sortLeaguesInOrder = (a,b) => {
+    a = a.toLowerCase();
+    b = b.toLowerCase();
+
+    let ai = leaguesInOrder.indexOf(a.split(" ")[0]);
+    let bi = leaguesInOrder.indexOf(b.split(" ")[0]);
+
+    if(ai < bi) return -1;
+    if(ai > bi) return 1;
+    return 0;
+
+}

@@ -1,4 +1,5 @@
 const {google} = require('googleapis');
+const functions = require("firebase-functions");
 const sheets = google.sheets({
     version: 'v4',
     auth: functions.config().google.sheet_api_key

@@ -543,3 +543,19 @@
     --background-color: var(--home-primary);
     --color: var(--home-accent);
 }
+
+.waivers {
+    --home-primary: #e9e9e9;
+    --home-accent: #444;
+
+    --away-primary: #e9e9e9;
+    --away-secondary: #444;
+
+    --alt-primary: #444;
+    --alt-accent: #e9e9e9;
+
+    --team-url: url("/img/MLE_Primary@2x.png");
+
+    --background-color: var(--home-primary);
+    --color: var(--home-accent);
+}

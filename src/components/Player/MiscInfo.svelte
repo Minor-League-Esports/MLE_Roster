@@ -3,6 +3,20 @@
     import AcctStatBlock from "./AcctStatBlock.svelte";
 
     export let data;
+
+    const sortAccounts = (a,b) => {
+        /* This reassignment is needed because sort is applied to an Object.entries */
+        a = a[0];
+        b = b[0];
+        if(a.startsWith("Main")) return 1;
+        else {
+            let ai = parseInt(a.split("_")[2]);
+            let bi = parseInt(b.split("_")[2]);
+            if(ai < bi) return -1;
+            if(ai > bi) return 1;
+            return 0;
+        }
+    }
 </script>
 
 <h3 class="uk-text-center">Misc Info</h3>
@@ -35,9 +49,8 @@
     </dl>
 </Flex>
 <hr/>
-<Flex wrap="wrap">
-{#each Object.entries(data.ACCOUNTS) as [acct, id] (id)}
+<div>
+{#each Object.entries(data.ACCOUNTS).sort(sortAccounts) as [acct, id] (id)}
     <AcctStatBlock {data} account_id={id} account={acct}/>
 {/each}
-</Flex>
-
+</div>

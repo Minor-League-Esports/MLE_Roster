@@ -34,8 +34,8 @@
         _minSalary = Math.min(..._players.map(p => p.SALARY.Salary));
         _maxSalary = Math.max(..._players.map(p => p.SALARY.Salary));
     }
-    let minSalary = _minSalary;
-    let maxSalary = _maxSalary;
+    let minSalary = _minSalary.toFixed(1);
+    let maxSalary = _maxSalary.toFixed(1);
 
     // Sorting / Filtering
     let query = "";

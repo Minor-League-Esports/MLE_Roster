@@ -2,6 +2,7 @@
     import {Button, Tile, Flex} from "svelte-uikit3";
     import {link} from "svelte-routing";
     import {SalaryCapByLeague} from "../../helpers/MLE_META";
+    import {sortLeaguesInOrder} from "../../helpers/MLE_META";
 
     export let team;
 
@@ -28,7 +29,7 @@
     const getSalaryOffset = (league) => {
         if (!Object.keys(totals).includes(league)) getSalaryTotal(league);
         let total = totals[league];
-        if (league === "Premier") return "-";
+        if (league === "Premier") return "N/A";
         return SalaryCapByLeague[league] - total;
     }
 </script>
@@ -73,7 +74,7 @@
             {/if}
         </dl>
     </Tile>
-    {#each Object.keys(players_by_league).sort() as league}
+    {#each Object.keys(players_by_league).sort(sortLeaguesInOrder) as league}
         {#if players_by_league[league].filter(p => p.Role.length).length > 0}
             <Tile width="1-1" style="primary" class="uk-width-1-2@s uk-width-1-1@l uk-padding-small">
                 <h3>
@@ -86,7 +87,7 @@
                         <li>
                             <a href="/player/{player.MLEID}" use:link>
                                 <Button style="text">
-                                    {player.Player} ({player.Salary}, {player.Role})
+                                    {player.Player} ({player.Salary})
                                 </Button>
                             </a>
                         </li>
@@ -99,7 +100,7 @@
                         <li>
                             <a href="/player/{player.MLEID}" use:link>
                                 <Button style="text">
-                                    {player.Player} ({player.Salary}, {player.Role})
+                                    {player.Player} ({player.Salary})
                                 </Button>
                             </a>
                         </li>
