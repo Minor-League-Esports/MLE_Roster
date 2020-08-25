@@ -12,9 +12,10 @@
         <section id="updates" transition:fly={{x: 50}}>
             <ul class="uk-list uk-list-hyphen">
                 <li>Added Season 11 Game Schedule, more to come in this area soon</li>
+                <li>Getting ready for Season 11 stats! This feature will be finished once live replay data becomes available.</li>
             </ul>
             <footer>
-                <span class="uk-text-meta">Last Updated 2020-08-15</span>
+                <span class="uk-text-meta">Last Updated 2020-08-25</span>
             </footer>
         </section>
     {/if}

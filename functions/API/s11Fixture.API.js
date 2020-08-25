@@ -8,7 +8,7 @@ async function processHomeAwaySheet(data) {
     for (let i = 0; i < data[0].length; i += 3) {
         promises.push(new Promise(resolve => {
             let j = i;
-            let matchNum = data[0][j];
+            let matchNum = data[0][j].split(" ")[1];
             let map = data[1][j];
             let days = data[2][j];
             // Collect Metadata

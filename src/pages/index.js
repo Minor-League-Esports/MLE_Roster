@@ -5,4 +5,4 @@ export {default as Player} from "./Player.svelte";
 export {default as Teams} from "./Teams.svelte";
 export {default as Team} from "./Team.svelte";
 export {default as Season} from "./Season.svelte";
-export {default as Week} from "./Week.svelte";
+export {default as Match} from "./Match.svelte";

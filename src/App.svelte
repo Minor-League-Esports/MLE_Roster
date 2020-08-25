@@ -1,7 +1,7 @@
 <script>
     import FirebaseInit from "./components/FirebaseInit.svelte";
     import {Router, Route} from 'svelte-routing';
-    import {Index, SignIn, Players, Player, Teams, Team, Season, Week} from "./pages";
+    import {Index, SignIn, Players, Player, Teams, Team, Season, Match} from "./pages";
     import Header from "./components/layout/Header.svelte";
     import {fade} from 'svelte/transition';
     import {onMount} from "svelte";
@@ -22,7 +22,7 @@
                 <Route path="/team/:team_name" component={Team}/>
 
                 <Route path="/season/:seasonNum" component={Season}/>
-                <Route path="/season/:seasonNum/:weekNum" component={Week}/>
+                <Route path="/season/:seasonNum/:matchNum" component={Match}/>
                 <Route path="/signin" component="{SignIn}"/>
             </Router>
         </div>

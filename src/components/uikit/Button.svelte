@@ -30,8 +30,6 @@
         classes = [...classes];
     }
 
-    $: console.log(classes);
-
 
 
     export let width = "";

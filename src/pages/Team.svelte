@@ -13,7 +13,7 @@
 
 
 <Body width="5-6" section="{false}">
-<Doc path="teams/{team_name}" on:data={(e) => team = e.detail.data} once={true}>
+<Doc path="teams/{team_name}" on:data={(e) => team = e.detail.data} once={true} source="cache">
     <header class="uk-width-1-1 uk-text-center uk-padding {team.name.toLowerCase()}">
         <TeamLogo height="8em" class="uk-margin-auto"/>
         <h1 class="uk-margin-small-bottom uk-margin-remove-top">{team.name}</h1>

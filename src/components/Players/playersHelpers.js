@@ -91,3 +91,8 @@ export const getPlayers = async (firestore) => {
     sessionStorage.setItem("players", JSON.stringify(cacheObj));
     return data;
 }
+export const getPlayer = async (firestore, player_id) => {
+    // getPlayers will create the cache if needed
+    let players = await getPlayers(firestore);
+    return players.filter(p => p.PLAYERS.MLEID === player_id)[0] || undefined;
+}

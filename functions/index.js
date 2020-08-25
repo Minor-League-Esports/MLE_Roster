@@ -16,15 +16,18 @@ const {OAuth2Client} = require('google-auth-library');
 const players = require("./funcs/players");
 const teams = require("./funcs/teams");
 const s11schedule = require ("./funcs/s11schedule");
-
+const s11stats = require("./funcs/s11Stats");
 const updateDatabase = async()=>{
-    let active_players = await players.updatePlayers();
-    let all_teams = await teams.updateTeams(active_players);
-    let s11 = await s11schedule.updateSchedule();
+    await Promise.all([
+        await players.updatePlayers().then(players => teams.updateTeams(players)),
+        await s11schedule.updateSchedule().then(fixture => s11stats.getS11Stats(fixture)),
+    ])
+
+
     await firestore.collection("metadata").doc("metadata").set({
         last_updated: new Date().getTime()
     });
-    console.log("Done!");
+    console.log("All Done!");
 }
 
 exports.scheduledUpdatePlayerDirectory = functions.pubsub.schedule("0 0 * * *").onRun(async (c) => {
