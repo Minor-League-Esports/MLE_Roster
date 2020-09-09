@@ -21,6 +21,18 @@ async function updatePlayerDirectoryAndGames() {
         let gameData = games[mleid];
         let player_meta = mleIds[mleid];
         let ranks = currentRanks[mleid];
+        let newAccounts = {};
+        if(data.ACCOUNTS){
+            Object.entries(data.ACCOUNTS).forEach(([key, value]) => {
+                if(!value.startsWith("https")) return;
+                let segments = value.split("/");
+                newAccounts[key] = {
+                    platform: segments[5],
+                    id: segments[6]
+                }
+            });
+        }
+        data.ACCOUNTS = newAccounts;
         return Object.assign({
             games: gameData,
             meta: player_meta,

@@ -34,7 +34,7 @@ exports.scheduledUpdatePlayerDirectory = functions.pubsub.schedule("0 0 * * *").
     await updateDatabase();
 });
 
-exports.populateLocaleDatabase = functions.https.onRequest(async (req, res) => {
+exports.populateLocaleDatabase = functions.runWith({timeoutSeconds: 540}).https.onRequest(async (req, res) => {
     await updateDatabase();
     res.json("Done!");
 })

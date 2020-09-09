@@ -10,7 +10,12 @@ const firestore = admin.firestore();
 const writeBatch = async function(collection, docs, keyPath){
     let batch = firestore.batch();
     docs.forEach(data => {
-        batch.set(collection.doc(keyPath(data)), data);
+        if(keyPath(data)){
+            batch.set(collection.doc(keyPath(data)), data);
+        } else {
+            console.log("Missing keypath on object!");
+            console.log(data);
+        }
     })
     return await batch.commit();
 }

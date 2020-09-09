@@ -3,7 +3,7 @@ const util = require("../util");
 
 exports.getSeason10 = async () => {
     console.log("Collecting Season 10 Team Stats");
-    const S10Statistics = "1YIuj_ER4Kd3CZFUAFbGwlTJqDoGY_t27XSw2ir0UxnA";
+    const S10Statistics = "1cbKKs1iUHSTDJSzng5KC_56jm-3tjp93w7L-bJ7UuHc";
     let [s10foundation, s10academy, s10champion, s10premier, s10combined] = await sheets.sheetValues(S10Statistics, [
             "Foundation Team Stats!A2:CW19",
             "Academy Team Stats!A2:CW35",

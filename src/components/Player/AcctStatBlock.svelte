@@ -9,8 +9,10 @@
     let isMain = account.startsWith("Main");
     let shown = isMain;
 
-    let stats = data.ranks[account_id.split("] ")[1]];
-
+    let stats = data.ranks[account_id.id];
+    console.log(data);
+    console.log(stats);
+    console.log(account_id);
 
     const toggle = () => {
         if(!isMain){

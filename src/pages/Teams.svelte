@@ -38,7 +38,7 @@
                     <h2 class="uk-text-center uk-width-1-1 uk-heading-divider">{conference} Conference</h2>
                     <Flex wrap="wrap">
                         {#each Object.keys(structure[conference]) as division (division)}
-                            <div class="uk-width-1-1 uk-width-1-2@m">
+                            <div class="uk-width-1-1 uk-width-1-2@m uk-padding">
                                 <h3 class="uk-text-center uk-width-1-1 uk-margin-small-top"> {division} Division</h3>
                                 <Flex wrap="wrap" justification="center">
                                     {#each Object.keys(structure[conference][division]) as teamName (teamName)}

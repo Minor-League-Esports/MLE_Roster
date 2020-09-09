@@ -75,8 +75,8 @@
     </div>
     <Tile style="default" width="1-1">
         {#if data.ACCOUNTS && data.ACCOUNTS.Main_Profile}
-            <BallchasingStream platform={getPlatform(data.ACCOUNTS.Main_Profile)}
-                               id={getId(data.ACCOUNTS.Main_Profile)}/>
+            <BallchasingStream platform={data.ACCOUNTS.Main_Profile.platform}
+                               id={data.ACCOUNTS.Main_Profile.id}/>
         {/if}
     </Tile>
 </Doc>

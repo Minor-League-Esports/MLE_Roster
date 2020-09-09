@@ -11,6 +11,7 @@
     import {filterPlayers, getPlayers} from "../components/Players/playersHelpers";
     import PageControl from "../components/PageControl.svelte";
     import TeamLogo from "../components/TeamLogo.svelte";
+    import {playersFactory} from "../helpers/stores";
 
     $: [players, pages] = filterPlayers(_players, order, asc, query, pageSize, pages, page, minSalary, maxSalary, team)
     $: if (order || asc || query || pageSize || minSalary || maxSalary || team) page = 0;
@@ -24,18 +25,21 @@
         page = 0;
     };
 
+    const firestore = getContext("firebase").getFirebase().firestore();
+    let _playersPromise = playersFactory(firestore);
     let _players = [];
     let players = [];
     let teams = [], team = "";
+    let loading = true;
+
+
     // Salaries
     let _minSalary = 0;
     let _maxSalary = 22;
-    $: {
-        _minSalary = Math.min(..._players.map(p => p.SALARY.Salary));
-        _maxSalary = Math.max(..._players.map(p => p.SALARY.Salary));
-    }
+
     let minSalary = _minSalary.toFixed(1);
     let maxSalary = _maxSalary.toFixed(1);
+
 
     // Sorting / Filtering
     let query = "";
@@ -45,15 +49,18 @@
     let page = 0;
     let pageSize = 20;
     let pages;
-    let loading = false;
 
-    const firestore = getContext("firebase").getFirebase().firestore();
-    onMount(async () => {
-        loading = true;
-        _players = await getPlayers(firestore);
-        teams = [...new Set(_players.map(p => p.PLAYERS.Team))].sort();
+    const unsub = _playersPromise.subscribe(v => {
+        console.log(v);
+        players = v;
+        _players = v;
+        teams = [...new Set(v.map(p => p.PLAYERS.Team))].sort();
         loading = false;
+        _minSalary = Math.min(...v.map(p => p.SALARY.Salary));
+        _maxSalary = Math.max(...v.map(p => p.SALARY.Salary));
     });
+
+    onDestroy(()=>unsub)
 
 </script>
 
