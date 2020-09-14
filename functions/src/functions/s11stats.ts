@@ -43,23 +43,34 @@ export async function getS11Stats(fixture: any) {
 
     prebatch.push(new PrebatchData(collection, meta, (a: any) => `Match ${a.match}`));
     for (let key in matches) {
-        let subcollection = firestore.collection(`s11Stats`);
+        let subcollection = firestore.collection(`s11`).doc(`Match ${key}`).collection("series");
         let data = matches[key];
-        data.forEach((d: any) => d.teams = [d.home, d.away])
-        // let i = 0;
-        prebatch.push(
-            // A closure is used here to encapsulate the value of i
-            new PrebatchData(subcollection, data, (
-                () => {
-                    const index = `Match ${key}`;
-                    return (a: any) => index.toString()
-                }
-            )()));
+        let i = 0;
+        data.forEach((d: any) => {
+            let {stats, ...outerdata} = d;
+            d.teams = [d.home, d.away];
+            prebatch.push(
+                // A closure is used here to encapsulate the value of i
+                new PrebatchData(subcollection, [outerdata], (
+                    () => {
+                        const index = `Series ${++i}`;
+                        return (a: any) => index.toString()
+                    }
+                )()));
+            let statscollection = firestore.collection(`s11`).doc(`Match ${key}`).collection("series").doc(`Series ${i}`).collection("stats");
+            if(stats){
+                Object.entries(stats).forEach(([league, data]: [string, any]) => {
+                    prebatch.push(new PrebatchData(statscollection, [data], (a:any) => league, 50));
+                })
+            }
+        })
     }
     await batch.writeBatches(prebatch);
 }
 
 export async function updateS11Schedule() {
     console.log("Updating season 11 schedule");
-    return s11StatsAPI.getHomeAway();
+    const output = await s11StatsAPI.getHomeAway();
+    console.log("Done updating season 11 schedule");
+    return output;
 }

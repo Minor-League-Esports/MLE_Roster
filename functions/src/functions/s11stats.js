@@ -53,23 +53,34 @@ async function getS11Stats(fixture) {
     const collection = firestore.collection("s11");
     prebatch.push(new BatchModels_1.PrebatchData(collection, meta, (a) => `Match ${a.match}`));
     for (let key in matches) {
-        let subcollection = firestore.collection(`s11Stats`);
+        let subcollection = firestore.collection(`s11`).doc(`Match ${key}`).collection("series");
         let data = matches[key];
-        data.forEach((d) => d.teams = [d.home, d.away]);
-        // let i = 0;
-        prebatch.push(
-        // A closure is used here to encapsulate the value of i
-        new BatchModels_1.PrebatchData(subcollection, data, (() => {
-            const index = `Match ${key}`;
-            return (a) => index.toString();
-        })()));
+        let i = 0;
+        data.forEach((d) => {
+            let { stats } = d, outerdata = __rest(d, ["stats"]);
+            d.teams = [d.home, d.away];
+            prebatch.push(
+            // A closure is used here to encapsulate the value of i
+            new BatchModels_1.PrebatchData(subcollection, [outerdata], (() => {
+                const index = `Series ${++i}`;
+                return (a) => index.toString();
+            })()));
+            let statscollection = firestore.collection(`s11`).doc(`Match ${key}`).collection("series").doc(`Series ${i}`).collection("stats");
+            if (stats) {
+                Object.entries(stats).forEach(([league, data]) => {
+                    prebatch.push(new BatchModels_1.PrebatchData(statscollection, [data], (a) => league, 50));
+                });
+            }
+        });
     }
     await batch.writeBatches(prebatch);
 }
 exports.getS11Stats = getS11Stats;
 async function updateS11Schedule() {
     console.log("Updating season 11 schedule");
-    return s11StatsAPI.getHomeAway();
+    const output = await s11StatsAPI.getHomeAway();
+    console.log("Done updating season 11 schedule");
+    return output;
 }
 exports.updateS11Schedule = updateS11Schedule;
 //# sourceMappingURL=s11stats.js.map

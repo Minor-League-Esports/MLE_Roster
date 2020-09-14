@@ -50,7 +50,7 @@ async function getSeason10() {
         getSeasonStats(s10premier.values, premier_labels !== null && premier_labels !== void 0 ? premier_labels : [], "10", "premier"),
         getSeasonStats(s10combined.values, combined_labels !== null && combined_labels !== void 0 ? combined_labels : [], "10", "combined"),
     ]);
-    return await combineSeasonStats(foundation, academy, champion, premier, combined);
+    return combineSeasonStats(foundation, academy, champion, premier, combined);
 }
 exports.getSeason10 = getSeason10;
 //# sourceMappingURL=Season10Stats.API.js.map

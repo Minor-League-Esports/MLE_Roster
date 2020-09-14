@@ -4,6 +4,7 @@ exports.writeBatches = void 0;
 const BatchModels_1 = require("../models/BatchModels");
 const admin = require('firebase-admin');
 const firestore = admin.firestore();
+let i = 0;
 async function writeBatch(documents) {
     let batch = firestore.batch();
     documents.data.forEach(document => {
@@ -21,18 +22,30 @@ async function writeBatch(documents) {
  * Converts PrebatchData to a Batch, and then commits the batch accordingly.
  */
 async function writeBatches(data) {
-    console.log("Starting a write operation...");
+    const opid = i++;
+    console.log(`(${opid}) | Starting a write operation...`);
     let batch = new BatchModels_1.Batch([]);
     // Convert all the PrebatchDatas to BatchDatas and include in the Batch
+    let batchSize = Number.MAX_SAFE_INTEGER;
     data.forEach(collectionScopedData => {
+        if (collectionScopedData.maxBatchSize < batchSize)
+            batchSize = collectionScopedData.maxBatchSize;
         collectionScopedData.documents.forEach(document => {
             batch.data.push(new BatchModels_1.BatchData(collectionScopedData.collection, document, collectionScopedData.keypath(document)));
         });
     });
-    let promises = [];
-    let documents = batch.getChunks(500);
-    documents.forEach(b => promises.push(writeBatch(b)));
-    await Promise.all(promises);
+    // Run in parallel
+    // let promises: Promise<any>[] = [];
+    // let documents: Batch[] = batch.getChunks(500);
+    // documents.forEach(b => promises.push(writeBatch(b)));
+    // await Promise.all(promises);
+    // Run in sequence
+    console.log(`(${opid}) | Batching with a max of ${batchSize} documents`);
+    let documents = batch.getChunks(batchSize);
+    for (let i = 0; i < documents.length; i++) {
+        await writeBatch(documents[i]);
+    }
+    console.log(`(${opid}) | Done writing`);
 }
 exports.writeBatches = writeBatches;
 //# sourceMappingURL=batch.API.js.map

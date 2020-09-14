@@ -2,10 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Batch = exports.BatchData = exports.PrebatchData = void 0;
 class PrebatchData {
-    constructor(collection, documents, keypath) {
+    constructor(collection, documents, keypath, maxBatchSize = 500) {
         this.collection = collection;
         this.documents = documents;
         this.keypath = keypath;
+        this.maxBatchSize = maxBatchSize;
     }
 }
 exports.PrebatchData = PrebatchData;
@@ -29,7 +30,6 @@ class Batch {
             if (total[i].data.length === chunkSize) {
                 i += 1;
                 total.push(new Batch([]));
-                console.log("Incrementing i");
             }
             total[i].data.push(current);
             return total;

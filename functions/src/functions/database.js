@@ -7,12 +7,10 @@ const teams_1 = require("./teams");
 const firestore = admin.firestore();
 const s11stats_1 = require("./s11stats");
 async function updateDatabase() {
-    await Promise.all([
-        // Update Team Rosters and Player Stats
-        players_1.updatePlayers().then(players => teams_1.updateTeams(players)),
-        // Update Season 11 statistics
-        s11stats_1.updateS11Schedule().then(fixture => s11stats_1.getS11Stats(fixture)),
-    ]);
+    // Update Team Rosters and Player Stats
+    await players_1.updatePlayers().then(players => teams_1.updateTeams(players));
+    // Update Season 11 statistics
+    await s11stats_1.updateS11Schedule().then(fixture => s11stats_1.getS11Stats(fixture));
     // Update last_updated variable
     await firestore.collection("metadata").doc("metadata").set({
         last_updated: new Date().getTime()

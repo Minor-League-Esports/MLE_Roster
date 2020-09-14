@@ -59,6 +59,6 @@ export async function getSeason10() {
         getSeasonStats(s10premier.values, premier_labels ?? [], "10", "premier"),
         getSeasonStats(s10combined.values, combined_labels ?? [],  "10", "combined"),
     ])
-    return await combineSeasonStats(foundation, academy, champion, premier, combined);
+    return combineSeasonStats(foundation, academy, champion, premier, combined);
 
 }

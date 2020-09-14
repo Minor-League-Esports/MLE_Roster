@@ -19,6 +19,7 @@ function processHomeAwaySheet(data: any) {
             output[matchNum].matches.push({
                 home: data[k][j + 2],
                 away: data[k][j],
+                matchNum: k-3
             })
         }
     }

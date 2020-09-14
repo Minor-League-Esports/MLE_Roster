@@ -5,13 +5,16 @@ export class PrebatchData {
     collection: admin.firestore.CollectionReference;
     documents: any[];
     keypath: (a: any) => string;
+    maxBatchSize: number;
 
     constructor(collection: admin.firestore.CollectionReference,
                 documents: any[],
-                keypath: (a: any) => string) {
+                keypath: (a: any) => string,
+                maxBatchSize: number = 500) {
         this.collection = collection;
         this.documents = documents;
         this.keypath = keypath;
+        this.maxBatchSize = maxBatchSize;
     }
 }
 
@@ -43,7 +46,6 @@ export class Batch {
             if(total[i].data.length === chunkSize){
                 i += 1;
                 total.push(new Batch([]));
-                console.log("Incrementing i");
             }
             total[i].data.push(current);
 
