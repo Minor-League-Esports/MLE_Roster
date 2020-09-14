@@ -32,7 +32,6 @@
                         <div class="{match.away.toLowerCase()} team uk-width-1-1">
                             <TeamLogo height="4em" includeBorder="true"/>
                             <span class="uk-text-large">{match.away}</span>
-
                         </div>
                     </a>
                     <Tile width="auto">at.</Tile>
@@ -47,8 +46,8 @@
                     -->
                 </Flex>
 
-                {#if match.stats}
-                        <a use:link href="/season/{seasonNum}/{matchNum}/{match.id}" class="uk-width-2-5@m uk-width-1-1 uk-margin-auto"><Button width="1-1" style="primary"><Icon icon="search"/> View Series Stats</Button></a>
+                {#if match.hasStats}
+                        <a use:link href="/season/{seasonNum}/{matchNum}/{match.id.split(" ")[1]}" class="uk-width-2-5@m uk-width-1-1 uk-margin-auto"><Button width="1-1" style="primary"><Icon icon="search"/> View Series Stats</Button></a>
                 {:else}
                     <div>
                         <span class="uk-text-large uk-text-meta uk-text-right">Series stats unavailable</span>

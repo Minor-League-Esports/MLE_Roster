@@ -48,7 +48,10 @@ export async function getS11Stats(fixture: any) {
         let i = 0;
         data.forEach((d: any) => {
             let {stats, ...outerdata} = d;
-            d.teams = [d.home, d.away];
+            outerdata.teams = [d.home, d.away];
+            if(stats) {
+                outerdata.hasStats = true;
+            }
             prebatch.push(
                 // A closure is used here to encapsulate the value of i
                 new PrebatchData(subcollection, [outerdata], (
@@ -60,6 +63,8 @@ export async function getS11Stats(fixture: any) {
             let statscollection = firestore.collection(`s11`).doc(`Match ${key}`).collection("series").doc(`Series ${i}`).collection("stats");
             if(stats){
                 Object.entries(stats).forEach(([league, data]: [string, any]) => {
+                    data.home = d.home;
+                    data.away = d.away;
                     prebatch.push(new PrebatchData(statscollection, [data], (a:any) => league, 50));
                 })
             }

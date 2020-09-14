@@ -1,6 +1,6 @@
 <script>
     import {Flex} from "svelte-uikit3";
-    import {Doc} from "sveltefire";
+    import {Doc, Collection} from "sveltefire";
     import SeriesHeader from "../components/Series/SeriesHeader.svelte";
     import Body from "../components/layout/Body.svelte";
     import {sortLeaguesInOrder} from "../helpers/MLE_META";
@@ -14,15 +14,16 @@
         matchNum,
         seriesNum
     };
-    let series;
+    let seriesData;
 </script>
 <Body>
-    <Doc once={true} path="s11/Match {matchNum}/series/{seriesNum}" on:data={(e)=>series = e.detail.data}>
-        <SeriesHeader {series} {...seriesMeta}/>
-
-        {#each Object.keys(series.stats).sort(sortLeaguesInOrder) as league}
-            <SeriesLeague {league} {series} />
-        {/each}
+    <Doc once={true} path="s11/Match {matchNum}/series/Series {seriesNum}" on:data={(e)=>seriesData = e.detail.data}>
+        <SeriesHeader series={seriesData} {...seriesMeta}/>
+        <Collection once={true} path="s11/Match {matchNum}/series/Series {seriesNum}/stats" let:data={data}>
+            {#each data.sort(sortLeaguesInOrder) as league}
+                <SeriesLeague {league}/>
+            {/each}
+        </Collection>
 
     </Doc>
 </Body>

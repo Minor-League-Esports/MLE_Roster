@@ -24,6 +24,8 @@ const leaguesInOrder = [
     "combined"
 ]
 export const sortLeaguesInOrder = (a,b) => {
+    if(typeof a !== "string") a = a.id;
+    if(typeof b !== "string") b = b.id;
     a = a.toLowerCase();
     b = b.toLowerCase();
 
