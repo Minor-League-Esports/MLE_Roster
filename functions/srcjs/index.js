@@ -17,6 +17,8 @@ const players = require("./funcs/players");
 const teams = require("./funcs/teams");
 const s11schedule = require ("./funcs/s11schedule");
 const s11stats = require("./funcs/s11Stats");
+
+
 const updateDatabase = async()=>{
     await Promise.all([
         await players.updatePlayers().then(players => teams.updateTeams(players)),

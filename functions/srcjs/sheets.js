@@ -21,5 +21,4 @@ exports.sheetValues = async (spreadsheetId, ranges) => {
     })
     let values = await Promise.all(promises);
     return values;
-
 }
