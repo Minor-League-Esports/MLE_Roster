@@ -6,7 +6,7 @@ import * as batchAPI from "../api/batch.API";
 import {PrebatchData} from "../models/BatchModels";
 
 const assignRosters = (players: any[]) => {
-    let teams: any = {};
+    const teams: any = {};
     players.forEach(player => {
         let team: any;
         if (Object.keys(teams).includes(player.PLAYERS.Team)) team = teams[player.PLAYERS.Team];
@@ -39,7 +39,6 @@ export async function updateTeams(players: any[]){
     if (docs.some((t: any) => t.name === "#N/A")) {
         docs = docs.filter((t: any) => t.name !== "#N/A");
     }
-    const output = await batchAPI.writeBatches([new PrebatchData(collection, docs, (a: any) => a.name)]);
+    await batchAPI.writeBatches([new PrebatchData(collection, docs, (a: any) => a.name)]);
     console.log("Done updating teams...");
-    return output
 }

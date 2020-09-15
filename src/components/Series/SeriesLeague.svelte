@@ -15,14 +15,14 @@
 
     onMount(async () => {
         league.players = await Promise.all(league.players.map(async p => Object.assign({}, await getPlayer(firestore, p.id), p)));
+        playersHaveLoaded = true;
         homeScore = league.games.filter(g => g.winner === league.home).length;
         awayScore = league.games.filter(g => g.winner === league.away).length;
     })
 
     let homeScore;
     let awayScore;
-    console.log(league);
-
+    let playersHaveLoaded = false;
     let show = false;
 </script>
 
@@ -30,7 +30,7 @@
 <h2 on:click={()=>show=!show} class="{league.id.toLowerCase()} uk-padding-small uk-width-1-2 uk-text-center">
     {league.id.charAt(0).toUpperCase()}{league.id.slice(1)} League </h2>
 
-{#if show}
+{#if show && playersHaveLoaded}
     <section transition:slide class="uk-width-1-1 uk-text-center">
 
         <div class="uk-flex uk-flex-column {league.away.toLowerCase()} uk-padding-small">

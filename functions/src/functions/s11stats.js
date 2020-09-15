@@ -19,19 +19,19 @@ const BatchModels_1 = require("../models/BatchModels");
 const firestore = admin.firestore();
 async function getS11Stats(fixture) {
     console.log("Updating season 11 statistics");
-    let result = await s11StatsAPI.getS11Stats();
-    let matches = Object.entries(fixture).reduce((reducer, [k, v]) => {
+    const result = await s11StatsAPI.getS11Stats();
+    const games = Object.entries(fixture).reduce((reducer, [k, v]) => {
         reducer[k] = v.matches;
         return reducer;
     }, {});
-    let meta = Object.values(fixture).map((r) => {
+    const meta = Object.values(fixture).map((r) => {
         const { matches } = r, output = __rest(r, ["matches"]);
         return output;
     });
     // Place match results into fixtures
     Object.values(result).forEach((r) => {
-        let week = matches[r.meta.match];
-        let match = week.filter((m) => r.teams.includes(m.home) && r.teams.includes(m.away))[0];
+        const week = games[r.meta.match];
+        const match = week.filter((m) => r.teams.includes(m.home) && r.teams.includes(m.away))[0];
         if (match) {
             if (!match.stats)
                 match.stats = {};
@@ -49,15 +49,15 @@ async function getS11Stats(fixture) {
 `);
         }
     });
-    let prebatch = [];
+    const prebatch = [];
     const collection = firestore.collection("s11");
     prebatch.push(new BatchModels_1.PrebatchData(collection, meta, (a) => `Match ${a.match}`));
-    for (let key in matches) {
-        let subcollection = firestore.collection(`s11`).doc(`Match ${key}`).collection("series");
-        let data = matches[key];
+    for (const key in games) {
+        const subcollection = firestore.collection(`s11`).doc(`Match ${key}`).collection("series");
+        const data = games[key];
         let i = 0;
         data.forEach((d) => {
-            let { stats } = d, outerdata = __rest(d, ["stats"]);
+            const { stats } = d, outerdata = __rest(d, ["stats"]);
             outerdata.teams = [d.home, d.away];
             if (stats) {
                 outerdata.hasStats = true;
@@ -68,12 +68,12 @@ async function getS11Stats(fixture) {
                 const index = `Series ${++i}`;
                 return (a) => index.toString();
             })()));
-            let statscollection = firestore.collection(`s11`).doc(`Match ${key}`).collection("series").doc(`Series ${i}`).collection("stats");
+            const statscollection = firestore.collection(`s11`).doc(`Match ${key}`).collection("series").doc(`Series ${i}`).collection("stats");
             if (stats) {
-                Object.entries(stats).forEach(([league, data]) => {
-                    data.home = d.home;
-                    data.away = d.away;
-                    prebatch.push(new BatchModels_1.PrebatchData(statscollection, [data], (a) => league, 50));
+                Object.entries(stats).forEach(([league, document]) => {
+                    document.home = d.home;
+                    document.away = d.away;
+                    prebatch.push(new BatchModels_1.PrebatchData(statscollection, [document], (a) => league, 50));
                 });
             }
         });

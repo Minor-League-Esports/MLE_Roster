@@ -11,15 +11,15 @@ async function updatePlayers() {
     const [mleIds, currentRanks] = await playerAPI.getReferenceData();
     const collection = firestore.collection("players");
     const docs = Object.entries(directory).map(([mleid, data]) => {
-        let gameData = games[mleid];
-        let player_meta = mleIds[mleid];
-        let ranks = currentRanks[mleid];
-        let newAccounts = {};
+        const gameData = games[mleid];
+        const player_meta = mleIds[mleid];
+        const ranks = currentRanks[mleid];
+        const newAccounts = {};
         if (data.ACCOUNTS) {
             Object.entries(data.ACCOUNTS).forEach(([key, value]) => {
                 if (!value.startsWith("https"))
                     return;
-                let segments = value.split("/");
+                const segments = value.split("/");
                 newAccounts[key] = {
                     platform: segments[5],
                     id: segments[6]

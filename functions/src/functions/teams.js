@@ -8,7 +8,7 @@ const season10StatsAPI = require("../api/Season10Stats.API");
 const batchAPI = require("../api/batch.API");
 const BatchModels_1 = require("../models/BatchModels");
 const assignRosters = (players) => {
-    let teams = {};
+    const teams = {};
     players.forEach(player => {
         let team;
         if (Object.keys(teams).includes(player.PLAYERS.Team))
@@ -38,9 +38,8 @@ async function updateTeams(players) {
     if (docs.some((t) => t.name === "#N/A")) {
         docs = docs.filter((t) => t.name !== "#N/A");
     }
-    const output = await batchAPI.writeBatches([new BatchModels_1.PrebatchData(collection, docs, (a) => a.name)]);
+    await batchAPI.writeBatches([new BatchModels_1.PrebatchData(collection, docs, (a) => a.name)]);
     console.log("Done updating teams...");
-    return output;
 }
 exports.updateTeams = updateTeams;
 //# sourceMappingURL=teams.js.map

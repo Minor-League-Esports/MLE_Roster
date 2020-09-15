@@ -4,12 +4,12 @@ exports.getS11Stats = exports.getHomeAway = void 0;
 // We do not use coalesce because the structure of this data is different enough to warrant a custom function
 const sheets = require("../helpers/sheets");
 function processHomeAwaySheet(data) {
-    let output = {};
+    const output = {};
     for (let i = 0; i < data[0].length; i += 3) {
-        let j = i;
-        let matchNum = data[0][j].split(" ")[1];
-        let map = data[1][j];
-        let days = data[2][j];
+        const j = i;
+        const matchNum = data[0][j].split(" ")[1];
+        const map = data[1][j];
+        const days = data[2][j];
         // Collect Metadata
         output[matchNum] = {};
         output[matchNum].map = map;
@@ -90,7 +90,7 @@ function buildBaseMatchObject(obj, match_id, current) {
 async function getHomeAway() {
     const MULTI_TOOL_SHEET = "14F0bsIXXIE4lFwUALCZUhH0ihWBtxj3HmazZwVnEEFc";
     const rawData = (await sheets.sheetValues(MULTI_TOOL_SHEET, ["Fixture Home/Away!A1:AP20"]))[0].values;
-    let data = processHomeAwaySheet(rawData);
+    const data = processHomeAwaySheet(rawData);
     return data;
 }
 exports.getHomeAway = getHomeAway;
@@ -98,24 +98,24 @@ async function getS11Stats() {
     var _a, _b, _c, _d, _e, _f, _g;
     console.log("Getting season 11 stats");
     const STAT_SHEET = "1itEo2kGGJFXviEZiqQMgCXU2EUHFV1KktHNlDQUENjU";
-    let statsMeta = (await sheets.sheetMeta(STAT_SHEET, ["RawReplayData"]));
-    let statSheetMeta = (_c = (_b = ((_a = statsMeta.sheets) !== null && _a !== void 0 ? _a : [])[0].properties) === null || _b === void 0 ? void 0 : _b.gridProperties) !== null && _c !== void 0 ? _c : {};
-    let statSheetData = (await sheets.sheetValues(STAT_SHEET, [
+    const statsMeta = (await sheets.sheetMeta(STAT_SHEET, ["RawReplayData"]));
+    const statSheetMeta = (_c = (_b = ((_a = statsMeta.sheets) !== null && _a !== void 0 ? _a : [])[0].properties) === null || _b === void 0 ? void 0 : _b.gridProperties) !== null && _c !== void 0 ? _c : {};
+    const statSheetData = (await sheets.sheetValues(STAT_SHEET, [
         `RawReplayData!A1:${sheets.columnToLetter((_d = statSheetMeta.columnCount) !== null && _d !== void 0 ? _d : 0)}${statSheetMeta.rowCount}`
     ]))[0];
-    let statSheetHeaders = (_f = (_e = statSheetData.values) === null || _e === void 0 ? void 0 : _e.splice(0, 2).map(ha => ha.map(h => sheets.clean(h)))) !== null && _f !== void 0 ? _f : [];
-    let statSheet = (_g = statSheetData.values) !== null && _g !== void 0 ? _g : [];
-    let promises = [];
-    for (let s of statSheet) {
+    const statSheetHeaders = (_f = (_e = statSheetData.values) === null || _e === void 0 ? void 0 : _e.splice(0, 2).map(ha => ha.map(h => sheets.clean(h)))) !== null && _f !== void 0 ? _f : [];
+    const statSheet = (_g = statSheetData.values) !== null && _g !== void 0 ? _g : [];
+    const promises = [];
+    for (const s of statSheet) {
         promises.push(sheets.coalesce(s, ...statSheetHeaders));
     }
-    let rawStats = await Promise.all(promises);
-    let stats = rawStats.reduce((obj, current) => {
-        let match_id = current.Series.match_id;
-        let gameNum = parseInt(current.Series_Game.game_num) - 1;
+    const rawStats = await Promise.all(promises);
+    const stats = rawStats.reduce((obj, current) => {
+        const match_id = current.Series.match_id;
+        const gameNum = parseInt(current.Series_Game.game_num) - 1;
         buildBaseMatchObject(obj, match_id, current);
         buildPlayersList(obj, match_id, current);
-        let game = obj[match_id].games[gameNum];
+        const game = obj[match_id].games[gameNum];
         buildTimeMeta(game, current);
         buildPlayerStat(game, current);
         if (!Object.keys(game).includes("ncp"))

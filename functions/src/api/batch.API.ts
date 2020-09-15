@@ -5,7 +5,7 @@ const firestore = admin.firestore();
 let i = 0;
 
 async function writeBatch(documents: Batch){
-    let batch = firestore.batch();
+    const batch = firestore.batch();
     documents.data.forEach(document => {
         if(document.key){
             batch.set(document.collection.doc(document.key), document.document);
@@ -24,7 +24,7 @@ async function writeBatch(documents: Batch){
 export async function writeBatches(data: PrebatchData[]){
     const opid = i++;
     console.log(`(${opid}) | Starting a write operation...`);
-    let batch: Batch = new Batch([]);
+    const batch: Batch = new Batch([]);
     // Convert all the PrebatchDatas to BatchDatas and include in the Batch
     let batchSize = Number.MAX_SAFE_INTEGER;
     data.forEach(collectionScopedData => {
@@ -39,11 +39,11 @@ export async function writeBatches(data: PrebatchData[]){
     // documents.forEach(b => promises.push(writeBatch(b)));
     // await Promise.all(promises);
     // Run in sequence
-    console.log(`(${opid}) | Batching with a max of ${batchSize} documents`)
-    let documents: Batch[] = batch.getChunks(batchSize);
-
-    for(let i=0; i<documents.length; i++){
-        await writeBatch(documents[i]);
+    console.log(`(${opid}) | Batching with a max of ${batchSize} documents`);
+    const documents: Batch[] = batch.getChunks(batchSize);
+    console.log(`(${opid}) | Using ${documents.length} batch(es)`);
+    for(const document of documents){
+        await writeBatch(document); //eslint-disable-line no-await-in-loop
     }
     console.log(`(${opid}) | Done writing`);
 }

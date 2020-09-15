@@ -73,7 +73,7 @@ async function getReferenceData() {
         mleids.values.reduce(sheets.asyncReductionFactory(mleid_labels), {}),
         // @ts-ignore
         currentRanks.values.reduce(async (pP, c) => {
-            let [obj, p] = await Promise.all([sheets.coalesce(c, ...currentRank_labels), pP]);
+            const [obj, p] = await Promise.all([sheets.coalesce(c, ...currentRank_labels), pP]);
             if (!Object.keys(p).includes(c[0]))
                 p[c[0]] = {};
             p[c[0]][obj["Tracker_ID"]] = obj;

@@ -58,7 +58,7 @@ function letterToColumn(letter) {
 exports.letterToColumn = letterToColumn;
 const setValue = (ref, currentLevel, val) => {
     if (ref.hasOwnProperty(currentLevel)) {
-        let temp = ref[currentLevel];
+        const temp = ref[currentLevel];
         if (Array.isArray(ref[currentLevel])) {
             ref[currentLevel].push(val);
         }
@@ -79,8 +79,8 @@ const setValue = (ref, currentLevel, val) => {
 async function coalesce(data, ...levels) {
     if (!data)
         return {};
-    let output = {};
-    let longest = Math.max(...levels.map(l => l.length));
+    const output = {};
+    const longest = Math.max(...levels.map(l => l.length));
     levels.forEach(level => {
         while (level.length < longest)
             level.push("");
@@ -128,7 +128,7 @@ async function coalesce(data, ...levels) {
 exports.coalesce = coalesce;
 function asyncReductionFactory(groups) {
     return async (pP, c) => {
-        let p = await pP;
+        const p = await pP;
         p[c[0]] = await coalesce(c, ...groups);
         return p;
     };
