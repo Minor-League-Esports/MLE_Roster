@@ -1,33 +1,49 @@
 import * as admin from "firebase-admin";
 
+export interface PrebatchOptions {
+    maxBatchSize?: number;
+    merge?: boolean;
+}
 
 export class PrebatchData {
+    static deconstruct(data: PrebatchData[]): any[]{
+        return data.reduce((reducer: any[], currentValue: PrebatchData)=>{
+            return [...reducer, ...currentValue.documents];
+        }, [])
+    }
+
     collection: admin.firestore.CollectionReference;
     documents: any[];
     keypath: (a: any) => string;
     maxBatchSize: number;
+    merge: boolean;
 
     constructor(collection: admin.firestore.CollectionReference,
                 documents: any[],
                 keypath: (a: any) => string,
-                maxBatchSize: number = 500) {
+                options: PrebatchOptions = {}) {
         this.collection = collection;
         this.documents = documents;
         this.keypath = keypath;
-        this.maxBatchSize = maxBatchSize;
+        this.maxBatchSize = options.maxBatchSize ?? 500;
+        this.merge = options.merge ?? false;
     }
+
 }
 
 export class BatchData {
     collection: admin.firestore.CollectionReference;
     document: any;
     key: string;
+    merge: boolean;
     constructor(collection: admin.firestore.CollectionReference,
                 document: any,
-                key: string){
+                key: string,
+                merge: boolean = false){
         this.collection = collection;
         this.document = document;
         this.key = key;
+        this.merge = merge;
     }
 }
 

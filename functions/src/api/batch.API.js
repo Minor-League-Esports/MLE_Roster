@@ -7,9 +7,12 @@ const firestore = admin.firestore();
 let i = 0;
 async function writeBatch(documents) {
     const batch = firestore.batch();
-    documents.data.forEach(document => {
+    documents.data.forEach((document) => {
         if (document.key) {
-            batch.set(document.collection.doc(document.key), document.document);
+            if (document.merge) {
+                console.log("Updating object instead of overwriting!");
+            }
+            batch.set(document.collection.doc(document.key), document.document, { merge: document.merge });
         }
         else {
             console.log("Missing keypath on object!");
@@ -21,17 +24,18 @@ async function writeBatch(documents) {
 /**
  * Converts PrebatchData to a Batch, and then commits the batch accordingly.
  */
-async function writeBatches(data) {
+async function writeBatches(...data) {
     const opid = i++;
     console.log(`(${opid}) | Starting a write operation...`);
     const batch = new BatchModels_1.Batch([]);
     // Convert all the PrebatchDatas to BatchDatas and include in the Batch
     let batchSize = Number.MAX_SAFE_INTEGER;
-    data.forEach(collectionScopedData => {
+    data.forEach((collectionScopedData) => {
         if (collectionScopedData.maxBatchSize < batchSize)
             batchSize = collectionScopedData.maxBatchSize;
-        collectionScopedData.documents.forEach(document => {
-            batch.data.push(new BatchModels_1.BatchData(collectionScopedData.collection, document, collectionScopedData.keypath(document)));
+        const merge = collectionScopedData.merge;
+        collectionScopedData.documents.forEach((document) => {
+            batch.data.push(new BatchModels_1.BatchData(collectionScopedData.collection, document, collectionScopedData.keypath(document), merge));
         });
     });
     // Run in parallel

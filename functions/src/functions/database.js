@@ -10,7 +10,7 @@ async function updateDatabase() {
     // Update Team Rosters and Player Stats
     await players_1.updatePlayers().then(players => teams_1.updateTeams(players));
     // Update Season 11 statistics
-    await s11stats_1.updateS11Schedule().then(fixture => s11stats_1.getS11Stats(fixture));
+    await s11stats_1.updateS11Schedule().then(fixture => s11stats_1.getS11Stats(fixture).then(stats => s11stats_1.updateS11Standings(stats)));
     // Update last_updated variable
     await firestore.collection("metadata").doc("metadata").set({
         last_updated: new Date().getTime()

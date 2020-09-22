@@ -38,7 +38,7 @@ async function updateTeams(players) {
     if (docs.some((t) => t.name === "#N/A")) {
         docs = docs.filter((t) => t.name !== "#N/A");
     }
-    await batchAPI.writeBatches([new BatchModels_1.PrebatchData(collection, docs, (a) => a.name)]);
+    await batchAPI.writeBatches(new BatchModels_1.PrebatchData(collection, docs, (a) => a.name));
     console.log("Done updating teams...");
 }
 exports.updateTeams = updateTeams;

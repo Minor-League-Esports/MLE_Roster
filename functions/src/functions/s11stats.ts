@@ -2,17 +2,18 @@ import * as s11StatsAPI from "../api/Season11Stats.API";
 import * as batch from "../api/batch.API";
 import * as admin from "firebase-admin";
 import {PrebatchData} from "../models/BatchModels";
+import {writeBatches} from "../api/batch.API";
 
 const firestore = admin.firestore();
 
-export async function getS11Stats(fixture: any) {
+export async function getS11Stats(fixture: any): Promise<PrebatchData[]> {
     console.log("Updating season 11 statistics");
     const result = await s11StatsAPI.getS11Stats();
     const games = Object.entries(fixture).reduce((reducer: any, [k, v]: [string, any]) => {
         reducer[k] = v.matches;
         return reducer;
     }, {});
-    const meta = Object.values(fixture).map((r:any) => {
+    const meta = Object.values(fixture).map((r: any) => {
         const {matches, ...output} = r;
         return output;
     });
@@ -38,7 +39,8 @@ export async function getS11Stats(fixture: any) {
         }
     })
 
-    const prebatch = [];
+    const prebatch: PrebatchData[] = [];
+    const output: PrebatchData[] = [];
     const collection = firestore.collection("s11");
 
     prebatch.push(new PrebatchData(collection, meta, (a: any) => `Match ${a.match}`));
@@ -49,28 +51,36 @@ export async function getS11Stats(fixture: any) {
         data.forEach((d: any) => {
             const {stats, ...outerdata} = d;
             outerdata.teams = [d.home, d.away];
-            if(stats) {
+            if (stats) {
                 outerdata.hasStats = true;
+                outerdata.leagues = {}
+                Object.keys(stats).forEach(league => {
+                    if(!outerdata.leagues[league]) outerdata.leagues[league] = {};
+                    outerdata.leagues[league].homeScore = stats[league].games.filter((g: any) => g.winner === d.home).length;
+                    outerdata.leagues[league].awayScore = stats[league].games.filter((g: any) => g.winner === d.away).length;
+                });
             }
-            prebatch.push(
-                // A closure is used here to encapsulate the value of i
-                new PrebatchData(subcollection, [outerdata], (
-                    () => {
-                        const index = `Series ${++i}`;
-                        return (a: any) => index.toString()
-                    }
-                )()));
-            const statscollection = firestore.collection(`s11`).doc(`Match ${key}`).collection("series").doc(`Series ${i}`).collection("stats");
-            if(stats){
+            // A closure is used here to encapsulate the value of i
+            const prebatchData = new PrebatchData(subcollection, [outerdata], (
+                () => {
+                    const index = `Series ${++i}`;
+                    return (a: any) => index.toString();
+                }
+            )())
+            prebatch.push(prebatchData);
+            output.push(prebatchData);
+            const statsCollection = firestore.collection(`s11`).doc(`Match ${key}`).collection("series").doc(`Series ${i}`).collection("stats");
+            if (stats) {
                 Object.entries(stats).forEach(([league, document]: [string, any]) => {
                     document.home = d.home;
                     document.away = d.away;
-                    prebatch.push(new PrebatchData(statscollection, [document], (a:any) => league, 50));
+                    prebatch.push(new PrebatchData(statsCollection, [document], (a: any) => league, {maxBatchSize: 50}));
                 })
             }
         })
     }
-    await batch.writeBatches(prebatch);
+    await batch.writeBatches(...prebatch);
+    return output;
 }
 
 export async function updateS11Schedule() {
@@ -78,4 +88,46 @@ export async function updateS11Schedule() {
     const output = await s11StatsAPI.getHomeAway();
     console.log("Done updating season 11 schedule");
     return output;
+}
+
+export async function updateS11Standings(stats: PrebatchData[]) {
+    console.log(`Inputting data for ${stats.reduce((r:number, c:PrebatchData)=> r + c.documents.length,0)} results`);
+    const data = PrebatchData.deconstruct(stats);
+    console.log(`Deconstruction yielded ${data.length} results`)
+    let teamScores: any = {};
+    data.forEach((match: any) => {
+        const homeTeam: string = match.home;
+        const awayTeam: string = match.away;
+        if (!Object.keys(teamScores).includes(homeTeam)) teamScores[homeTeam] = {};
+        if (!Object.keys(teamScores).includes(awayTeam)) teamScores[awayTeam] = {};
+
+        if(match.leagues){
+            Object.keys(match.leagues).forEach((league: string) => {
+                if(!teamScores[homeTeam][league]) teamScores[homeTeam][league] = {};
+                if(!teamScores[awayTeam][league]) teamScores[awayTeam][league] = {};
+                // Home Team
+                teamScores[homeTeam][league].win = (teamScores[homeTeam][league].win ?? 0) + match.leagues[league].homeScore;
+                teamScores[homeTeam][league].lose = (teamScores[homeTeam][league].lose ?? 0) + match.leagues[league].awayScore;
+
+                teamScores[awayTeam][league].win = (teamScores[awayTeam][league].win ?? 0) + match.leagues[league].awayScore;
+                teamScores[awayTeam][league].lose = (teamScores[awayTeam][league].lose ?? 0) + match.leagues[league].homeScore;
+            })
+        }
+    });
+
+    const teamsCollection = firestore.collection("teams");
+
+    await writeBatches(
+        new PrebatchData(
+            teamsCollection,
+            Object.entries(teamScores).map(([teamName, standings]: [string, any])=>{
+                return {
+                    name: teamName,
+                    standings
+                }
+            }),
+            (a:any) => a.name,
+            {merge: true}
+        )
+    );
 }

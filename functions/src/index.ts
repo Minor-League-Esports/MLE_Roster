@@ -17,14 +17,14 @@ import * as database from "./functions/database";
 /**
  * Scheduled job that runs nightly at Midnight Pacific Time
  */
-exports.scheduledUpdatePlayerDirectory = functions.pubsub.schedule("0 0 * * *").onRun(async (c) => {
+exports.scheduledUpdatePlayerDirectory = functions.runWith({memory:"1GB"}).pubsub.schedule("0 0 * * *").onRun(async (c) => {
     await database.updateDatabase();
 });
 
 /**
  * Used for local testing and manual pushes
  */
-exports.populateLocaleDatabase = functions.runWith({timeoutSeconds: 540, memory:"2GB"}).https.onRequest(async (req, res) => {
+exports.populateLocaleDatabase = functions.runWith({timeoutSeconds: 540, memory:"1GB"}).https.onRequest(async (req, res) => {
     await database.updateDatabase();
     res.json("Done!");
 })

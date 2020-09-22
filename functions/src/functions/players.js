@@ -34,7 +34,7 @@ async function updatePlayers() {
             eligible: !Object.keys(ineligible).includes(mleid)
         }, data);
     });
-    await batchAPI.writeBatches([new BatchModels_1.PrebatchData(collection, docs, (a) => a.meta.MLEID)]);
+    await batchAPI.writeBatches(new BatchModels_1.PrebatchData(collection, docs, (a) => a.meta.MLEID));
     return docs;
 }
 exports.updatePlayers = updatePlayers;

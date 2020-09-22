@@ -11,11 +11,12 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateS11Schedule = exports.getS11Stats = void 0;
+exports.updateS11Standings = exports.updateS11Schedule = exports.getS11Stats = void 0;
 const s11StatsAPI = require("../api/Season11Stats.API");
 const batch = require("../api/batch.API");
 const admin = require("firebase-admin");
 const BatchModels_1 = require("../models/BatchModels");
+const batch_API_1 = require("../api/batch.API");
 const firestore = admin.firestore();
 async function getS11Stats(fixture) {
     console.log("Updating season 11 statistics");
@@ -50,6 +51,7 @@ async function getS11Stats(fixture) {
         }
     });
     const prebatch = [];
+    const output = [];
     const collection = firestore.collection("s11");
     prebatch.push(new BatchModels_1.PrebatchData(collection, meta, (a) => `Match ${a.match}`));
     for (const key in games) {
@@ -61,24 +63,33 @@ async function getS11Stats(fixture) {
             outerdata.teams = [d.home, d.away];
             if (stats) {
                 outerdata.hasStats = true;
+                outerdata.leagues = {};
+                Object.keys(stats).forEach(league => {
+                    if (!outerdata.leagues[league])
+                        outerdata.leagues[league] = {};
+                    outerdata.leagues[league].homeScore = stats[league].games.filter((g) => g.winner === d.home).length;
+                    outerdata.leagues[league].awayScore = stats[league].games.filter((g) => g.winner === d.away).length;
+                });
             }
-            prebatch.push(
             // A closure is used here to encapsulate the value of i
-            new BatchModels_1.PrebatchData(subcollection, [outerdata], (() => {
+            const prebatchData = new BatchModels_1.PrebatchData(subcollection, [outerdata], (() => {
                 const index = `Series ${++i}`;
                 return (a) => index.toString();
-            })()));
-            const statscollection = firestore.collection(`s11`).doc(`Match ${key}`).collection("series").doc(`Series ${i}`).collection("stats");
+            })());
+            prebatch.push(prebatchData);
+            output.push(prebatchData);
+            const statsCollection = firestore.collection(`s11`).doc(`Match ${key}`).collection("series").doc(`Series ${i}`).collection("stats");
             if (stats) {
                 Object.entries(stats).forEach(([league, document]) => {
                     document.home = d.home;
                     document.away = d.away;
-                    prebatch.push(new BatchModels_1.PrebatchData(statscollection, [document], (a) => league, 50));
+                    prebatch.push(new BatchModels_1.PrebatchData(statsCollection, [document], (a) => league, { maxBatchSize: 50 }));
                 });
             }
         });
     }
-    await batch.writeBatches(prebatch);
+    await batch.writeBatches(...prebatch);
+    return output;
 }
 exports.getS11Stats = getS11Stats;
 async function updateS11Schedule() {
@@ -88,4 +99,40 @@ async function updateS11Schedule() {
     return output;
 }
 exports.updateS11Schedule = updateS11Schedule;
+async function updateS11Standings(stats) {
+    console.log(`Inputting data for ${stats.reduce((r, c) => r + c.documents.length, 0)} results`);
+    const data = BatchModels_1.PrebatchData.deconstruct(stats);
+    console.log(`Deconstruction yielded ${data.length} results`);
+    let teamScores = {};
+    data.forEach((match) => {
+        const homeTeam = match.home;
+        const awayTeam = match.away;
+        if (!Object.keys(teamScores).includes(homeTeam))
+            teamScores[homeTeam] = {};
+        if (!Object.keys(teamScores).includes(awayTeam))
+            teamScores[awayTeam] = {};
+        if (match.leagues) {
+            Object.keys(match.leagues).forEach((league) => {
+                var _a, _b, _c, _d;
+                if (!teamScores[homeTeam][league])
+                    teamScores[homeTeam][league] = {};
+                if (!teamScores[awayTeam][league])
+                    teamScores[awayTeam][league] = {};
+                // Home Team
+                teamScores[homeTeam][league].win = ((_a = teamScores[homeTeam][league].win) !== null && _a !== void 0 ? _a : 0) + match.leagues[league].homeScore;
+                teamScores[homeTeam][league].lose = ((_b = teamScores[homeTeam][league].lose) !== null && _b !== void 0 ? _b : 0) + match.leagues[league].awayScore;
+                teamScores[awayTeam][league].win = ((_c = teamScores[awayTeam][league].win) !== null && _c !== void 0 ? _c : 0) + match.leagues[league].awayScore;
+                teamScores[awayTeam][league].lose = ((_d = teamScores[awayTeam][league].lose) !== null && _d !== void 0 ? _d : 0) + match.leagues[league].homeScore;
+            });
+        }
+    });
+    const teamsCollection = firestore.collection("teams");
+    await batch_API_1.writeBatches(new BatchModels_1.PrebatchData(teamsCollection, Object.entries(teamScores).map(([teamName, standings]) => {
+        return {
+            name: teamName,
+            standings
+        };
+    }), (a) => a.name, { merge: true }));
+}
+exports.updateS11Standings = updateS11Standings;
 //# sourceMappingURL=s11stats.js.map
