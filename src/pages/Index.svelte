@@ -32,7 +32,14 @@
         <a use:link href="/season/11" class="uk-width-3-4 uk-width-1-3@m">
             <Button width="1-1">
                 <Icon icon="calendar"/>
-                Season 11
+                Season 11 Series Stats
+            </Button>
+        </a>
+        <hr class="uk-width-1-2"/>
+        <a use:link href="/season/11/standings" class="uk-width-3-4 uk-width-1-3@m">
+            <Button width="1-1">
+                <Icon icon="list"/>
+                Season 11 Standings
             </Button>
         </a>
     </Flex>

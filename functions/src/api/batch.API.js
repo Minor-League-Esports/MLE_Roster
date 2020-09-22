@@ -9,9 +9,6 @@ async function writeBatch(documents) {
     const batch = firestore.batch();
     documents.data.forEach((document) => {
         if (document.key) {
-            if (document.merge) {
-                console.log("Updating object instead of overwriting!");
-            }
             batch.set(document.collection.doc(document.key), document.document, { merge: document.merge });
         }
         else {
@@ -35,7 +32,14 @@ async function writeBatches(...data) {
             batchSize = collectionScopedData.maxBatchSize;
         const merge = collectionScopedData.merge;
         collectionScopedData.documents.forEach((document) => {
-            batch.data.push(new BatchModels_1.BatchData(collectionScopedData.collection, document, collectionScopedData.keypath(document), merge));
+            try {
+                collectionScopedData.keypath(document);
+                batch.data.push(new BatchModels_1.BatchData(collectionScopedData.collection, document, collectionScopedData.keypath(document), merge));
+            }
+            catch (_a) {
+                console.log("Error on keypath for document!");
+                console.log(document);
+            }
         });
     });
     // Run in parallel

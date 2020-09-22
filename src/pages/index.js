@@ -7,4 +7,5 @@ export {default as Team} from "./Team.svelte";
 export {default as Season} from "./Season.svelte";
 export {default as Match} from "./Match.svelte";
 export {default as Lost404} from "./Lost404.svelte";
-export {default as Series} from "./Series.svelte"
+export {default as Series} from "./Series.svelte";
+export {default as Standings} from "./Standings.svelte";

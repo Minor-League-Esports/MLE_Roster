@@ -21,6 +21,6 @@
         <Season10Stats season={team.stats["s10"]}/>
     </li>
     <li>
-        <Season11Stats team={team}/>
+        <Season10Stats season={team.stats["s11"]}/>
     </li>
 </ul>

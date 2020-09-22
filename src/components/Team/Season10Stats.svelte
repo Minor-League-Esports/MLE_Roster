@@ -18,6 +18,9 @@
     {/if}
     <li><a class="uk-link-reset uk-padding-small">Academy</a></li>
     <li><a class="uk-link-reset uk-padding-small">Champion</a></li>
+    {#if season.hasOwnProperty("master")}
+        <li><a class="uk-link-reset uk-padding-small">Master</a></li>
+    {/if}
     {#if season.hasOwnProperty("premier")}
         <li><a class="uk-link-reset uk-padding-small">Premier</a></li>
     {/if}
@@ -30,6 +33,9 @@
     {/if}
     <li><LeagueStats leagueName={"Academy"} league={season["academy"]}/></li>
     <li><LeagueStats leagueName={"Champion"} league={season["champion"]}/></li>
+    {#if season.hasOwnProperty("master")}
+        <li><LeagueStats leagueName={"Master"} league={season["master"]}/></li>
+    {/if}
     {#if season.hasOwnProperty("premier")}
         <li><LeagueStats leagueName={"Premier"} league={season["premier"]}/></li>
     {/if}

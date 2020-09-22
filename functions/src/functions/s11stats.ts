@@ -123,7 +123,9 @@ export async function updateS11Standings(stats: PrebatchData[]) {
             Object.entries(teamScores).map(([teamName, standings]: [string, any])=>{
                 return {
                     name: teamName,
-                    standings
+                    standings: {
+                        s11: standings
+                    }
                 }
             }),
             (a:any) => a.name,

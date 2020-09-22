@@ -130,7 +130,9 @@ async function updateS11Standings(stats) {
     await batch_API_1.writeBatches(new BatchModels_1.PrebatchData(teamsCollection, Object.entries(teamScores).map(([teamName, standings]) => {
         return {
             name: teamName,
-            standings
+            standings: {
+                s11: standings
+            }
         };
     }), (a) => a.name, { merge: true }));
 }

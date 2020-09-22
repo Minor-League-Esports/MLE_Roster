@@ -1,7 +1,7 @@
 import * as admin from "firebase-admin";
 const firestore = admin.firestore();
 import * as teamsAPI from "../api/teams.API";
-import * as season10StatsAPI from "../api/Season10Stats.API";
+import * as combinedStatsAPI from "../api/CombinedStats.API";
 import * as batchAPI from "../api/batch.API";
 import {PrebatchData} from "../models/BatchModels";
 
@@ -25,11 +25,16 @@ const assignRosters = (players: any[]) => {
 }
 
 export async function updateTeams(players: any[]){
-    const [season10Stats, teamMeta, teamLeadership, rosters] = await Promise.all([season10StatsAPI.getSeason10(), teamsAPI.getTeamMeta(), teamsAPI.getTeamLeadership(players), assignRosters(players)])
+    const [seasonStats, teamMeta, teamLeadership, rosters] = await Promise.all([
+        combinedStatsAPI.getStats(),
+        teamsAPI.getTeamMeta(),
+        teamsAPI.getTeamLeadership(players),
+        assignRosters(players)]
+    )
 
     const teams: any = {};
     const addToTeams = ([name, data]: [string, any]) => teams[name] = Object.assign((teams[name] || {}), data);
-    Object.entries(season10Stats).forEach(addToTeams);
+    Object.entries(seasonStats).forEach(addToTeams);
     Object.entries(teamMeta).forEach(addToTeams);
     Object.entries(teamLeadership).forEach(addToTeams);
     Object.entries(rosters).forEach(addToTeams);
