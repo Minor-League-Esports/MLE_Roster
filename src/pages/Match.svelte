@@ -7,6 +7,8 @@
     import TeamLogo from "../components/TeamLogo.svelte";
     import Spinner from "../components/uikit/Spinner.svelte";
     import Icon from "../components/uikit/Icon.svelte";
+    import CachedQuery from "../components/firebase/CachedQuery.svelte";
+    import {matchStoreFactory, matchSeriesStoreFactory} from "../helpers/firebase/FirestoreCacheStoreFactory";
 
     export let seasonNum;
     export let matchNum;
@@ -17,12 +19,13 @@
 
 
 <Body>
-<Doc once={true} path="s11/Match {matchNum}" on:data={(e)=>weekMeta = e.detail.data}>
+<!-- TODO: Write CachedDoc -->
+<CachedQuery store={matchStoreFactory(seasonNum, matchNum)} on:data={(e)=>weekMeta = e.detail.data}>
     <h1 class="uk-margin-remove">Season {seasonNum} | Match {weekMeta.match}</h1>
     <span class="uk-text-large">{weekMeta.days}</span>
     <hr class="uk-width-1-2"/>
     <Flex width="1-1" direction="column" class="uk-text-center">
-        <Collection once={true} path="s11/Match {matchNum}/series" on:data={(e)=>series = e.detail.data}>
+        <CachedQuery once={true} store={matchSeriesStoreFactory(seasonNum, matchNum)} on:data={(e)=>series = e.detail.data}>
             <div slot="loading">
                 <Spinner show={true}/>
             </div>
@@ -45,9 +48,8 @@
                     <TeamCard width="expand" team={match.home} logoHeight="5em"/>
                     -->
                 </Flex>
-
                 {#if match.hasStats}
-                        <a use:link href="/season/{seasonNum}/{matchNum}/{match.id.split(" ")[1]}" class="uk-width-2-5@m uk-width-1-1 uk-margin-auto"><Button width="1-1" style="primary"><Icon icon="search"/> View Series Stats</Button></a>
+                        <a use:link href="/season/{seasonNum}/{matchNum}/{match.matchNum}" class="uk-width-2-5@m uk-width-1-1 uk-margin-auto"><Button width="1-1" style="primary"><Icon icon="search"/> View Series Stats</Button></a>
                 {:else}
                     <div>
                         <span class="uk-text-large uk-text-meta uk-text-right">Series stats unavailable</span>
@@ -55,9 +57,9 @@
                 {/if}
                 <hr class="uk-width-1-1"/>
             {/each}
-        </Collection>
+        </CachedQuery>
     </Flex>
-</Doc>
+</CachedQuery>
 </Body>
 
 <style lang="scss">

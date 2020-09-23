@@ -6,7 +6,6 @@
     import {fade} from 'svelte/transition';
     import {onMount} from "svelte";
     import UpdatePopup from "./components/layout/UpdatePopup.svelte";
-    import Test from "./pages/Test.svelte";
 </script>
 
 <FirebaseInit>
@@ -14,7 +13,6 @@
         <Header/>
         <div class="uk-position-relative">
             <Router>
-                <Route path="/test" component={Test}/>
 
                 <Route path="/" component={Index}/>
 

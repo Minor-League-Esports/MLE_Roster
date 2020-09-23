@@ -5,7 +5,7 @@
     import Spinner from "../components/uikit/Spinner.svelte";
     import TeamLogo from "../components/TeamLogo.svelte";
     import TeamCard from "../components/Players/TeamCard.svelte";
-    import CachedCollection from "../components/firebase/CachedCollection.svelte";
+    import CachedQuery from "../components/firebase/CachedQuery.svelte";
     import {teamStoreFactory} from "../helpers/firebase/FirestoreCacheStoreFactory";
 
     let teams;
@@ -29,7 +29,7 @@
     <h1 class="uk-text-center uk-heading-line"> <span>MLE Teams </span></h1>
 </div>
 <div class="uk-display-block">
-    <CachedCollection once={true} store={teamStoreFactory()} on:data={(e)=>teams = e.detail.data}>
+    <CachedQuery once={true} store={teamStoreFactory()} on:data={(e)=>teams = e.detail.data}>
         <div slot="loading">
             <Spinner show={true}/>
         </div>
@@ -54,7 +54,7 @@
                 </div>
             {/each}
         </div>
-    </CachedCollection>
+    </CachedQuery>
 </div>
 </Body>
 

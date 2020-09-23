@@ -5,6 +5,8 @@
     import Body from "../components/layout/Body.svelte";
     import {sortLeaguesInOrder} from "../helpers/MLE_META";
     import SeriesLeague from "../components/Series/SeriesLeague.svelte";
+    import {seriesStoreFactory, seriesStatsStoreFactory} from "../helpers/firebase/FirestoreCacheStoreFactory";
+    import CachedQuery from "../components/firebase/CachedQuery.svelte";
 
     export let seasonNum;
     export let matchNum;
@@ -17,13 +19,13 @@
     let seriesData;
 </script>
 <Body>
-    <Doc once={true} path="s11/Match {matchNum}/series/Series {seriesNum}" on:data={(e)=>seriesData = e.detail.data}>
+    <CachedQuery store={seriesStoreFactory(seasonNum, matchNum, seriesNum)} on:data={(e)=>seriesData = e.detail.data}>
         <SeriesHeader series={seriesData} {...seriesMeta}/>
-        <Collection once={true} path="s11/Match {matchNum}/series/Series {seriesNum}/stats" let:data={data}>
+        <CachedQuery store={seriesStatsStoreFactory(seasonNum, matchNum, seriesNum)} let:data={data}>
             {#each data.sort(sortLeaguesInOrder) as league}
                 <SeriesLeague {league}/>
             {/each}
-        </Collection>
+        </CachedQuery>
 
-    </Doc>
+    </CachedQuery>
 </Body>

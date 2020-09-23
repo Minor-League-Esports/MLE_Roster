@@ -1,27 +1,28 @@
 <script>
     import {Card, Flex, uk_width} from "svelte-uikit3";
-    import {Collection} from "sveltefire";
+    import {seasonStoreFactory} from "../helpers/firebase/FirestoreCacheStoreFactory";
     import {link} from "svelte-routing";
     import {fade} from "svelte/transition";
     import Body from "../components/layout/Body.svelte";
+    import CachedQuery from "../components/firebase/CachedQuery.svelte";
 
     export let seasonNum;
     let season = {};
     let matchNumbers = {};
     $: matchNumbers = Object.keys(season).sort(
-            (a, b) => {
-                if (parseInt(a.split(" ")[1]) > parseInt(b.split(" ")[1])) {
-                    return 1;
-                } else if (parseInt(a.split(" ")[1]) < parseInt(b.split(" ")[1])) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            })
+        (a, b) => {
+            if (parseInt(a.split(" ")[1]) > parseInt(b.split(" ")[1])) {
+                return 1;
+            } else if (parseInt(a.split(" ")[1]) < parseInt(b.split(" ")[1])) {
+                return -1;
+            } else {
+                return 0;
+            }
+        })
 </script>
 
 <Body>
-<Collection once={true} path="s{seasonNum}" on:data={(e)=>season = e.detail.data}>
+<CachedQuery once={true} store={seasonStoreFactory(seasonNum)} on:data={(e)=>season = e.detail.data}>
     <header class="uk-text-center">
         <h1>Season {seasonNum}</h1>
         <p class="uk-text-meta uk-margin-remove">Please note this section is a work in progress, and more information is being added</p>
@@ -41,5 +42,5 @@
             </a>
         </div>
     {/each}
-</Collection>
+</CachedQuery>
 </Body>

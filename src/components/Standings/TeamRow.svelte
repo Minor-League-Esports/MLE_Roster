@@ -6,6 +6,8 @@
     export let season;
     export let league;
     export let mostWins;
+    export let position;
+
     let standings;
     $: standings = team.standings["s" + season][league];
     let stats;
@@ -14,18 +16,20 @@
 
 <section class="{team.name.toLowerCase()}">
     <div class="team">
+        <BigText fontSize="2em">{position}</BigText>
+        <hr class="uk-divider-vertical"/>
         <TeamLogo includeBorder={true} class="uk-margin-auto"/>
         <a href="/team/{team.name}" class="uk-link-reset"><h2>{team.name}</h2></a>
     </div>
 
     <div class="stats">
-        <BigText fontSize="2em" label="WIN %">{stats.GENERAL_TEAM_STATS["Win_%"]}</BigText>
-        <hr class="uk-divider-vertical"/>
-        <BigText fontSize="2em" label="GOAL DIFF">{stats.GENERAL_TEAM_STATS["GD"]}</BigText>
-        <hr class="uk-divider-vertical mobile-break"/>
         <BigText fontSize="2em" label="WINS">{standings.win}</BigText>
         <BigText fontSize="2em" class="uk-padding-small uk-padding-remove-vertical">-</BigText>
         <BigText fontSize="2em" label="LOSSES">{standings.lose}</BigText>
+        <hr class="uk-divider-vertical mobile-break"/>
+        <BigText fontSize="2em" label="WIN %">{stats.GENERAL_TEAM_STATS["Win_%"]}</BigText>
+        <hr class="uk-divider-vertical"/>
+        <BigText fontSize="2em" label="GOAL DIFF">{stats.GENERAL_TEAM_STATS["GD"]}</BigText>
         <hr class="uk-divider-vertical"/>
         <BigText fontSize="2em" label="GAMES BEHIND">{mostWins - standings.win}</BigText>
     </div>
@@ -44,6 +48,22 @@
         align-items: center;
         margin: 0.5em 0 0 0;
 
+        hr{
+            height:2em;
+
+            border-color:currentColor;
+            border-width:3px;
+            &.mobile-break{
+                width:100%;
+                display:block;
+                height:0;
+                margin:0;
+            }
+            &:not(.mobile-break){
+                margin:auto 1em;
+            }
+        }
+
         h2 {
             color: inherit;
             margin: 0;
@@ -61,21 +81,7 @@
             display:flex;
             flex-wrap:wrap;
             justify-content:center;
-            hr{
-                height:2em;
 
-                border-color:currentColor;
-                border-width:3px;
-                &.mobile-break{
-                    width:100%;
-                    display:block;
-                    height:0;
-                    margin:0;
-                }
-                &:not(.mobile-break){
-                    margin:auto 1em;
-                }
-            }
             .divider {
                 font-weight: bolder;
             }

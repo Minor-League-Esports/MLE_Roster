@@ -6,18 +6,20 @@
     import {flip} from "svelte/animate";
     import {fly} from "svelte/transition";
     import TeamRow from "../components/Standings/TeamRow.svelte";
+    import CachedQuery from "../components/firebase/CachedQuery.svelte";
+    import {teamStoreFactory} from "../helpers/firebase/FirestoreCacheStoreFactory";
 
     export let seasonNum;
     let _teams, teams = [];
-    let league = "foundation";
+    let league = "";
     $:{
         if (_teams)
             teams = _teams.filter(t => {
                 return t.name !== "RFA" && t.name !== "FA" && t.name !== "WW" && t.name !== "N/A" &&
-                    Object.keys(t.standings["s"+seasonNum]).includes(league);
+                    Object.keys(t.standings["s" + seasonNum]).includes(league);
             }).sort((t1, t2) => {
-                if (t1.standings["s"+seasonNum][league].win > t2.standings["s"+seasonNum][league].win) return -1;
-                else if (t1.standings["s"+seasonNum][league].win < t2.standings["s"+seasonNum][league].win) return 1;
+                if (t1.standings["s" + seasonNum][league].win > t2.standings["s" + seasonNum][league].win) return -1;
+                else if (t1.standings["s" + seasonNum][league].win < t2.standings["s" + seasonNum][league].win) return 1;
                 else return 0;
             })
     }
@@ -25,21 +27,21 @@
 </script>
 
 <Body>
-<Collection once={true} path="teams" on:data={(e)=>_teams = e.detail.data}>
+<CachedQuery store={teamStoreFactory()} on:data={(e)=>_teams = e.detail.data}>
     <h1>Season {seasonNum} standings</h1>
     <Flex wrap="wrap" justification="center">
-        <LeagueButton selected={league} league="foundation" on:update={(e) => league = e.detail}/>
-        <LeagueButton selected={league} league="academy" on:update={(e) => league = e.detail}/>
-        <LeagueButton selected={league} league="champion" on:update={(e) => league = e.detail}/>
-        <LeagueButton selected={league} league="master" on:update={(e) => league = e.detail}/>
         <LeagueButton selected={league} league="premier" on:update={(e) => league = e.detail}/>
+        <LeagueButton selected={league} league="master" on:update={(e) => league = e.detail}/>
+        <LeagueButton selected={league} league="champion" on:update={(e) => league = e.detail}/>
+        <LeagueButton selected={league} league="academy" on:update={(e) => league = e.detail}/>
+        <LeagueButton selected={league} league="foundation" on:update={(e) => league = e.detail}/>
     </Flex>
     {#each teams as team, i (team.name)}
         <div animate:flip={{duration:500}} in:fly={{x:-100}} out:fly={{x:100}} class="uk-width-1-1">
-            <TeamRow {team} season={seasonNum} {league} mostWins={teams[0].standings["s"+seasonNum][league].win}/>
+            <TeamRow position="#{i+1}" {team} season={seasonNum} {league} mostWins={teams[0].standings["s"+seasonNum][league].win}/>
         </div>
     {/each}
-</Collection>
+</CachedQuery>
 </Body>
 
 <style lang="scss">
