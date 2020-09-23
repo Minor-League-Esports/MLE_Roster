@@ -77,7 +77,7 @@ async function getStats() {
     // @ts-ignore
     const [s10, s11] = await Promise.all([getSeason10(), getSeason11()]);
     // TODO: Wait for somebody to tell me if changing TEAMS to TEAM is going to break shit
-    let output = {};
+    const output = {};
     Object.entries(s11).forEach(([team, data]) => {
         output[team] = {};
         output[team].stats = {};

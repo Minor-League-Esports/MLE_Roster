@@ -83,9 +83,9 @@
         h1 {
             color: #fff;
         }
-
         img, > .row > a {
-            height: 8em;
+            max-height: 8em;
+            min-width:8em;
         }
 
     }

@@ -11,7 +11,7 @@
     import {filterPlayers, getPlayers} from "../components/Players/playersHelpers";
     import PageControl from "../components/PageControl.svelte";
     import TeamLogo from "../components/TeamLogo.svelte";
-    import {playersFactory} from "../helpers/stores";
+    import {playerStoreFactory} from "../helpers/firebase/FirestoreCacheStoreFactory";
 
     $: [players, pages] = filterPlayers(_players, order, asc, query, pageSize, pages, page, minSalary, maxSalary, team)
     $: if (order || asc || query || pageSize || minSalary || maxSalary || team) page = 0;
@@ -25,8 +25,7 @@
         page = 0;
     };
 
-    const firestore = getContext("firebase").getFirebase().firestore();
-    let _playersPromise = playersFactory(firestore);
+    let _playersPromise = playerStoreFactory();
     let _players = [];
     let players = [];
     let teams = [], team = "";
@@ -52,6 +51,7 @@
 
     const unsub = _playersPromise.subscribe(v => {
         console.log(v);
+        if(v.hasOwnProperty("loading")) return;
         players = v;
         _players = v;
         teams = [...new Set(v.map(p => p.PLAYERS.Team))].sort();

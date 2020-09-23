@@ -16,7 +16,6 @@ const s11StatsAPI = require("../api/Season11Stats.API");
 const batch = require("../api/batch.API");
 const admin = require("firebase-admin");
 const BatchModels_1 = require("../models/BatchModels");
-const batch_API_1 = require("../api/batch.API");
 const firestore = admin.firestore();
 async function getS11Stats(fixture) {
     console.log("Updating season 11 statistics");
@@ -26,8 +25,8 @@ async function getS11Stats(fixture) {
         return reducer;
     }, {});
     const meta = Object.values(fixture).map((r) => {
-        const { matches } = r, output = __rest(r, ["matches"]);
-        return output;
+        const { matches } = r, extra = __rest(r, ["matches"]);
+        return extra;
     });
     // Place match results into fixtures
     Object.values(result).forEach((r) => {
@@ -103,7 +102,7 @@ async function updateS11Standings(stats) {
     console.log(`Inputting data for ${stats.reduce((r, c) => r + c.documents.length, 0)} results`);
     const data = BatchModels_1.PrebatchData.deconstruct(stats);
     console.log(`Deconstruction yielded ${data.length} results`);
-    let teamScores = {};
+    const teamScores = {};
     data.forEach((match) => {
         const homeTeam = match.home;
         const awayTeam = match.away;
@@ -127,7 +126,7 @@ async function updateS11Standings(stats) {
         }
     });
     const teamsCollection = firestore.collection("teams");
-    await batch_API_1.writeBatches(new BatchModels_1.PrebatchData(teamsCollection, Object.entries(teamScores).map(([teamName, standings]) => {
+    await batch.writeBatches(new BatchModels_1.PrebatchData(teamsCollection, Object.entries(teamScores).map(([teamName, standings]) => {
         return {
             name: teamName,
             standings: {

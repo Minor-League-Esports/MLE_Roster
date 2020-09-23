@@ -2,7 +2,6 @@ import * as s11StatsAPI from "../api/Season11Stats.API";
 import * as batch from "../api/batch.API";
 import * as admin from "firebase-admin";
 import {PrebatchData} from "../models/BatchModels";
-import {writeBatches} from "../api/batch.API";
 
 const firestore = admin.firestore();
 
@@ -14,8 +13,8 @@ export async function getS11Stats(fixture: any): Promise<PrebatchData[]> {
         return reducer;
     }, {});
     const meta = Object.values(fixture).map((r: any) => {
-        const {matches, ...output} = r;
-        return output;
+        const {matches, ...extra} = r;
+        return extra;
     });
     // Place match results into fixtures
     Object.values(result).forEach((r: any) => {
@@ -94,7 +93,7 @@ export async function updateS11Standings(stats: PrebatchData[]) {
     console.log(`Inputting data for ${stats.reduce((r:number, c:PrebatchData)=> r + c.documents.length,0)} results`);
     const data = PrebatchData.deconstruct(stats);
     console.log(`Deconstruction yielded ${data.length} results`)
-    let teamScores: any = {};
+    const teamScores: any = {};
     data.forEach((match: any) => {
         const homeTeam: string = match.home;
         const awayTeam: string = match.away;
@@ -117,7 +116,7 @@ export async function updateS11Standings(stats: PrebatchData[]) {
 
     const teamsCollection = firestore.collection("teams");
 
-    await writeBatches(
+    await batch.writeBatches(
         new PrebatchData(
             teamsCollection,
             Object.entries(teamScores).map(([teamName, standings]: [string, any])=>{

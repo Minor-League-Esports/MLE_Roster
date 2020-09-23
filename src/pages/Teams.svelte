@@ -1,11 +1,12 @@
 <script>
-    import {Collection} from "sveltefire";
     import {link} from "svelte-routing";
     import {Flex} from "svelte-uikit3";
     import Body from "../components/layout/Body.svelte";
     import Spinner from "../components/uikit/Spinner.svelte";
     import TeamLogo from "../components/TeamLogo.svelte";
     import TeamCard from "../components/Players/TeamCard.svelte";
+    import CachedCollection from "../components/firebase/CachedCollection.svelte";
+    import {teamStoreFactory} from "../helpers/firebase/FirestoreCacheStoreFactory";
 
     let teams;
     let structure = {};
@@ -28,7 +29,7 @@
     <h1 class="uk-text-center uk-heading-line"> <span>MLE Teams </span></h1>
 </div>
 <div class="uk-display-block">
-    <Collection once={true} path="teams" on:data={(e)=>teams = e.detail.data}>
+    <CachedCollection once={true} store={teamStoreFactory()} on:data={(e)=>teams = e.detail.data}>
         <div slot="loading">
             <Spinner show={true}/>
         </div>
@@ -53,7 +54,7 @@
                 </div>
             {/each}
         </div>
-    </Collection>
+    </CachedCollection>
 </div>
 </Body>
 
