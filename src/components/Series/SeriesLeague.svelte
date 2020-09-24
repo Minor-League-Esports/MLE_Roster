@@ -14,7 +14,7 @@
 
 
     onMount(async () => {
-        league.players = await Promise.all(league.players.map(async p => Object.assign({}, await getPlayer(firestore, p.id), p)));
+        league.players = await Promise.all(league.players.map(async p => Object.assign({}, await getPlayer(p.id), p)));
         playersHaveLoaded = true;
         homeScore = league.games.filter(g => g.winner === league.home).length;
         awayScore = league.games.filter(g => g.winner === league.away).length;

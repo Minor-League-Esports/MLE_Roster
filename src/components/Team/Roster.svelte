@@ -3,14 +3,14 @@
     import {link} from "svelte-routing";
     import {SalaryCapByLeague} from "../../helpers/MLE_META";
     import {sortLeaguesInOrder} from "../../helpers/MLE_META";
-    import {getPlayers} from "../Players/playersHelpers";
+    import {getAllPlayers} from "../Players/playersHelpers";
     import {getContext, onMount} from "svelte";
 
     export let team;
     const firestore = getContext("firebase").getFirebase().firestore();
     let players = false;
     onMount(async () => {
-        players = (await getPlayers(firestore)).reduce((o, v) => {
+        players = (await getAllPlayers(firestore)).reduce((o, v) => {
             o[v.PLAYERS.MLEID] = v;
             return o;
         }, {});

@@ -8,3 +8,10 @@ export function getFirestoreFromContext() {
     }
     return firebase.firestore();
 }
+export function attachId(documentRef) {
+    return Object.assign(
+        {},
+        {id: documentRef.id},
+        documentRef.data()
+    );
+}

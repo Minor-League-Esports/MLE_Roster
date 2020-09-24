@@ -24,6 +24,13 @@
                 By Team
             </Button>
         </a>
+        <hr class="uk-width-1-2"/>
+        <a use:link href="/detail/roster" class="uk-width-3-4 uk-width-1-3@m">
+            <Button width="1-1">
+                <Icon icon="grid"/>
+                Compare Rosters
+            </Button>
+        </a>
     </Flex>
 </Card>
 <Card width="1-1" class="uk-margin-medium">

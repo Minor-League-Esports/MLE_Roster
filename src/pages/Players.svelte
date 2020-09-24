@@ -8,7 +8,7 @@
     import {link} from "svelte-routing";
     import Spinner from "../components/uikit/Spinner.svelte";
     import FilterPanel from "../components/Players/FilterPanel.svelte";
-    import {filterPlayers, getPlayers} from "../components/Players/playersHelpers";
+    import {filterPlayers, getAllPlayers} from "../components/Players/playersHelpers";
     import PageControl from "../components/PageControl.svelte";
     import TeamLogo from "../components/TeamLogo.svelte";
     import {playerStoreFactory} from "../helpers/firebase/FirestoreCacheStoreFactory";
@@ -50,7 +50,6 @@
     let pages;
 
     const unsub = _playersPromise.subscribe(v => {
-        console.log(v);
         if(v.hasOwnProperty("loading")) return;
         players = v;
         _players = v;

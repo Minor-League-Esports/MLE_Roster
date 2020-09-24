@@ -1,7 +1,6 @@
 import {cache} from "./cache.API";
 import {readable} from "svelte/store";
-import {getFirestoreFromContext} from "../firestore";
-
+import {attachId, getFirestoreFromContext} from "../firestore";
 
 function FirestoreCacheStoreFactory({queryFn, key, preprocessFn = (a)=>a, isDoc = false, parentCollectionKey, id}={}) {
     if (!key) throw new Error("'key' is required to use the FirestoreCaseStoreFactory");
@@ -23,15 +22,6 @@ function FirestoreCacheStoreFactory({queryFn, key, preprocessFn = (a)=>a, isDoc 
             }
             return false;
         }
-    }
-    function attachId(documentRef) {
-        const output = Object.assign(
-            {},
-            {id: documentRef.id},
-            documentRef.data()
-        );
-        console.log(output);
-        return output;
     }
 
     return readable({loading: true},

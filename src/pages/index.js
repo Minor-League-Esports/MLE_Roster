@@ -9,3 +9,4 @@ export {default as Match} from "./Match.svelte";
 export {default as Lost404} from "./Lost404.svelte";
 export {default as Series} from "./Series.svelte";
 export {default as Standings} from "./Standings.svelte";
+export {default as RosterDetail} from "./RosterDetail.svelte";

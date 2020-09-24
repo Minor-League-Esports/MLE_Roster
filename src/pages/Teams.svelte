@@ -19,7 +19,6 @@
             if (!structure[t.Conference].hasOwnProperty(t.Division)) structure[t.Conference][t.Division] = {};
             structure[t.Conference][t.Division][t.Team] = t;
         });
-        console.log(structure);
     }
 
 </script>

@@ -2,11 +2,11 @@ import {getFirestoreFromContext} from "../firestore";
 
 export const cache = {
     /**
-     * @param firebase {firebase.firestore.Firestore}
+     * @param firestore {firebase.firestore.Firestore}
      * @returns {Promise<Date>}
      */
-    async getLastUpdated() {
-        const firestore = getFirestoreFromContext();
+    async getLastUpdated(firestore = null) {
+        if (!firestore) firestore = getFirestoreFromContext();
         const lastLookup = new Date(localStorage.getItem("mler_cache_check_ttl") || 0);
         if (lastLookup !== new Date(0) && lastLookup < new Date().setMinutes(new Date().getMinutes() - 1)) {
             // lastLookup is not epoch and is more than 1 minute in the past
@@ -24,11 +24,13 @@ export const cache = {
     /**
      * Ensures that the cache is valid before attempting to retrieve the data.
      * Cache validity is done by comparing the remote last updated to the local last updated, with remote being called at most once per minute
+     * @param firestore {firebase.firestore.Firestore}
      * @returns {Promise<void>}
      */
-    async checkValidity() {
+    async checkValidity(firestore = null) {
+        if (!firestore) firestore = getFirestoreFromContext();
         const localLastUpdated = new Date(JSON.parse(localStorage.getItem("mler_lst_updated")) || 0);
-        const remoteLastUpdated = await this.getLastUpdated();
+        const remoteLastUpdated = await this.getLastUpdated(firestore);
         if (localLastUpdated < remoteLastUpdated) {
             console.debug("MLER | CACHE | Cache is invalid!...");
             this.clear();
@@ -37,7 +39,6 @@ export const cache = {
             console.debug("MLER | CACHE | Cache is valid!...");
         }
     },
-
 
 
     /**

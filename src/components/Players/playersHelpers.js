@@ -1,3 +1,7 @@
+import {cache} from "../../helpers/firebase/cache.API";
+import {attachId, getFirestoreFromContext} from "../../helpers/firestore";
+
+
 /**
  *
  * @param input {Player[]}
@@ -10,9 +14,6 @@
  * @param minSalary {int}
  * @param maxSalary {int}
  */
-import {collectionStore} from "sveltefire/src";
-import {readable, writable} from "svelte/store";
-
 export const filterPlayers = (input, order, asc, query, pageSize, pages, page, minSalary, maxSalary, team) => {
     let output = input.filter(item => {
         try {
@@ -59,40 +60,32 @@ export const filterPlayers = (input, order, asc, query, pageSize, pages, page, m
 }
 
 
-/**
- *
- * @param firestore {firebase.firestore.Firestore}
- */
-export const getPlayers = async (firestore) => {
-    let cached = sessionStorage.getItem("players");
-    try {
-        if (cached) {
-            cached = JSON.parse(cached);
-            if (new Date(cached.timeout) > new Date() && cached.players.length > 0) {
-                // Use Cache
-                // While this store isn't really used as a store, it maintains compatibility in the non-cached case.
-                return cached.players;
-            }
-        }
-    } catch {
+export const getAllPlayers = async (firestore=false) => {
+    if(!firestore) firestore = getFirestoreFromContext();
+    await cache.checkValidity(firestore);
+    if(cache.contains("all_players")){
+        return cache.get("all_players");
     }
+
+
     // Failed to use cache
     let data = [];
     let result = await firestore.collection("players")
         .orderBy("PLAYERS.Player")
         .get();
 
-    result.forEach(r=>data.push(r.data()));
+    result.forEach(r=>data.push(attachId(r)));
+    cache.set("all_players", data);
 
-    let cacheObj = {
-        players: data,
-        timeout: new Date().setHours(new Date().getHours() + 1)
-    }
-    sessionStorage.setItem("players", JSON.stringify(cacheObj));
     return data;
 }
-export const getPlayer = async (firestore, player_id) => {
+export const getPlayer = async player_id => {
     // getPlayers will create the cache if needed
-    let players = await getPlayers(firestore);
-    return players.filter(p => p.PLAYERS.MLEID === player_id)[0] || undefined;
+    let players = await getAllPlayers();
+    return players.filter(p => p.id === player_id)[0] || undefined;
+}
+
+export const getPlayers = async (player_ids) => {
+    const players = await getAllPlayers();
+    return players.filter(p => player_ids.includes(p.id));
 }
