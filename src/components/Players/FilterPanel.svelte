@@ -93,11 +93,11 @@
                     <optgroup>
                         <option value="">All Teams</option>
                         <option value="FA">Free Agents</option>
-                        <option value="Waivers">Waiver Players</option>
+                        <option value="WW">Waiver Players</option>
                     </optgroup>
                     <optgroup label="Franchises">
                         {#each teams as team (team)}
-                            {#if team !== "FA" && team !== "#N/A" && team !== "Waviers"}
+                            {#if team !== "FA" && team !== "#N/A" && team !== "WW"}
                                 <option value="{team}">{team}</option>
                             {/if}
                         {/each}
