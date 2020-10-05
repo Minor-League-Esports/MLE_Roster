@@ -9,6 +9,7 @@ const database = require("./functions/database");
 const pubsub_1 = require("./helpers/pubsub");
 const Job_1 = require("./models/JobModels/Job");
 const JobRouter_1 = require("./models/JobModels/JobRouter");
+const LZUTF8 = require("lzutf8");
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
@@ -26,6 +27,8 @@ exports.runUpdateJob = functions.runWith({ memory: "1GB" }).pubsub.topic("mler_d
     var _a;
     // Deserialize the job to execute
     const job = Job_1.Job.fromJSON(message.json);
+    if (job.data)
+        job.data = JSON.parse(LZUTF8.decompress(job.data, { inputEncoding: "Base64" }));
     // Also deserialize child jobs, to n+1 depth
     job.childJobs = job.childJobs.map(j => Job_1.Job.fromJSON(j));
     // Execute job

@@ -7,6 +7,7 @@ const players_1 = require("../../functions/players");
 const teams_1 = require("../../functions/teams");
 const s11stats_1 = require("../../functions/s11stats");
 const database_1 = require("../../functions/database");
+const BatchModels_1 = require("../BatchModels");
 exports.JobRouter = new Map([
     [
         JobType_1.JobType.PLAYERS,
@@ -17,7 +18,7 @@ exports.JobRouter = new Map([
     [
         JobType_1.JobType.SEASONSTATS,
         new JobExecution_1.JobExecution({
-            run: async (job) => s11stats_1.getS11Stats(job.data)
+            run: async (job) => BatchModels_1.PrebatchData.deconstruct(await s11stats_1.getS11Stats(job.data))
         })
     ],
     [

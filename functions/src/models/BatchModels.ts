@@ -58,7 +58,6 @@ export class Batch {
         let i = 0;
         // @ts-ignore
         return this.data.reduce((total: Batch[], current: BatchData) => {
-            // debugger;
             if(total[i].data.length === chunkSize){
                 i += 1;
                 total.push(new Batch([]));

@@ -5,6 +5,7 @@ import {Job} from "./Job";
 import {updateTeams} from "../../functions/teams";
 import {getS11Stats, updateS11Schedule, updateS11Standings} from "../../functions/s11stats";
 import {updateMetadata} from "../../functions/database";
+import {PrebatchData} from "../BatchModels";
 
 export const JobRouter: Map<JobType, JobExecution> = new Map<JobType, JobExecution>([
     [
@@ -16,7 +17,7 @@ export const JobRouter: Map<JobType, JobExecution> = new Map<JobType, JobExecuti
     [
         JobType.SEASONSTATS,
         new JobExecution({
-            run: async (job: Job) => getS11Stats(job.data)
+            run: async (job: Job) => PrebatchData.deconstruct(await getS11Stats(job.data))
         })
     ],
     [

@@ -9,8 +9,7 @@ import * as database from "./functions/database";
 import {pubsubClient} from "./helpers/pubsub";
 import {Job} from "./models/JobModels/Job";
 import {JobRouter} from "./models/JobModels/JobRouter";
-import {directoryJobChain} from "./models/JobModels/Jobs";
-
+import * as LZUTF8 from "lzutf8";
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -31,6 +30,7 @@ exports.scheduledUpdatePlayerDirectory = functions.runWith({memory: "1GB"}).pubs
 exports.runUpdateJob = functions.runWith({memory: "1GB"}).pubsub.topic("mler_db_jobs").onPublish(async (message, context) => {
     // Deserialize the job to execute
     const job: Job = Job.fromJSON(message.json);
+    if(job.data) job.data = JSON.parse(LZUTF8.decompress(job.data, {inputEncoding: "Base64"}));
     // Also deserialize child jobs, to n+1 depth
     job.childJobs = job.childJobs.map(j => Job.fromJSON(j));
     // Execute job
