@@ -7,7 +7,7 @@ class JobExecution {
         this.run =
             async (job) => {
                 console.log(`Executing: ${job.description}`);
-                const data = LZUTF8.compress(JSON.stringify(await options.run(job)), { outputEncoding: "Base64" });
+                const data = LZUTF8.compress(JSON.stringify(await options.run(job)) || "", { outputEncoding: "Base64" });
                 job.childJobs.forEach((j) => j.data = data);
                 console.log(`Done executing: ${job.description}`);
             };
