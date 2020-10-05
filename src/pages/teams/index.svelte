@@ -1,12 +1,12 @@
 <script>
     import {link} from "svelte-routing";
     import {Flex} from "svelte-uikit3";
-    import Body from "../components/layout/Body.svelte";
-    import Spinner from "../components/uikit/Spinner.svelte";
-    import TeamLogo from "../components/TeamLogo.svelte";
-    import TeamCard from "../components/Players/TeamCard.svelte";
-    import CachedQuery from "../components/firebase/CachedQuery.svelte";
-    import {teamStoreFactory} from "../helpers/firebase/FirestoreCacheStoreFactory";
+    import Body from "../../components/layout/Body.svelte";
+    import Spinner from "../../components/uikit/Spinner.svelte";
+    import TeamLogo from "../../components/TeamLogo.svelte";
+    import TeamCard from "../../components/Players/TeamCard.svelte";
+    import CachedQuery from "../../components/firebase/CachedQuery.svelte";
+    import {teamStoreFactory} from "../../helpers/firebase/FirestoreCacheStoreFactory";
 
     let teams;
     let structure = {};

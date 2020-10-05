@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTeamLeadership = exports.getTeamMeta = void 0;
 const sheets = require("../helpers/sheets");
 const mleMeta = require("../helpers/mleMeta");
+const sheets_1 = require("../helpers/sheets");
 async function getTeamMeta() {
     var _a, _b, _c, _d;
     const DIRECTORY_SHEET = "13yPS53Oe4B97pRsPM9bV4GFvs6b_nZ6KiqPqjCQDb6E";
@@ -10,11 +11,7 @@ async function getTeamMeta() {
     const [detailedRoster] = await sheets.sheetValues(DIRECTORY_SHEET, ["Rosters (Detailed)!B95:D127"]);
     const roster_labels = (_b = (_a = detailedRoster.values) === null || _a === void 0 ? void 0 : _a.splice(0, 1).map((a) => a.map(sheets.clean))) !== null && _b !== void 0 ? _b : [];
     // @ts-ignore
-    return (_d = (_c = detailedRoster.values) === null || _c === void 0 ? void 0 : _c.reduce(async (pP, c) => {
-        const [team, p] = await Promise.all([sheets.coalesce(c, ...roster_labels), pP]);
-        p[c[0]] = team;
-        return p;
-    }, {})) !== null && _d !== void 0 ? _d : {};
+    return (_d = (_c = detailedRoster.values) === null || _c === void 0 ? void 0 : _c.reduce(sheets_1.reductionFactory(roster_labels), {})) !== null && _d !== void 0 ? _d : {};
 }
 exports.getTeamMeta = getTeamMeta;
 async function getTeamLeadership(players) {
@@ -24,8 +21,8 @@ async function getTeamLeadership(players) {
     const leadership_labels = (_b = (_a = teamLeadership.values) === null || _a === void 0 ? void 0 : _a.splice(0, 1).map((a) => a.map(sheets.clean))) !== null && _b !== void 0 ? _b : [[]];
     leadership_labels[0][0] = "Team"; // Spreadsheet does not contain a header in this spot because... reasons
     // @ts-ignore
-    return (_d = (_c = teamLeadership.values) === null || _c === void 0 ? void 0 : _c.reduce(async (pP, c) => {
-        const [team, p] = await Promise.all([sheets.coalesce(c, ...leadership_labels), pP]);
+    return (_d = (_c = teamLeadership.values) === null || _c === void 0 ? void 0 : _c.reduce((p, c) => {
+        const team = sheets.coalesce(c, ...leadership_labels);
         Object.keys(team).forEach(role => {
             if (role === "Team")
                 return;

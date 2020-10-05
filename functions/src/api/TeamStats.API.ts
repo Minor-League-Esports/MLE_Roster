@@ -1,9 +1,10 @@
 import * as sheets from "../helpers/sheets";
+import {attachColumnOrdinals} from "../helpers/sheets";
 
 async function getSeasonStats(data: any, labels: string[][], season: string, league: string) {
     if(labels[1][0] === "Teams") labels[1][0] = "Team"; // TODO: Unhackify this
-    return data.reduce(async (pP: Promise<any>, c: any) => {
-        const [team, p] = await Promise.all([sheets.coalesce(c, ...labels), pP]);
+    return data.reduce((p: any, c: any) => {
+        const team = attachColumnOrdinals(sheets.coalesce(c, ...labels));
         if (!p.hasOwnProperty(team.Team)) p[team.Team] = {};
         if (!p[team.Team].hasOwnProperty("stats")) p[team.Team].stats = {};
         if (!p[team.Team].stats.hasOwnProperty(season)) p[team.Team].stats[season] = {};
@@ -92,6 +93,7 @@ export async function getStats(){
     const [s10, s11] = await Promise.all([getSeason10(), getSeason11()]);
     // TODO: Wait for somebody to tell me if changing TEAMS to TEAM is going to break shit
     const output: any = {};
+
     Object.entries(s11).forEach(([team, data]: [string, any]) => {
         output[team] = {};
         output[team].stats = {};

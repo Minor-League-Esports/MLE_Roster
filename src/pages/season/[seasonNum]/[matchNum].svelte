@@ -2,16 +2,18 @@
     import {Flex, Tile, Button} from "svelte-uikit3";
     import {Doc, Collection} from "sveltefire";
     import {link} from "svelte-routing";
-    import Body from "../components/layout/Body.svelte";
-    import TeamCard from "../components/Players/TeamCard.svelte";
-    import TeamLogo from "../components/TeamLogo.svelte";
-    import Spinner from "../components/uikit/Spinner.svelte";
-    import Icon from "../components/uikit/Icon.svelte";
-    import CachedQuery from "../components/firebase/CachedQuery.svelte";
-    import {matchStoreFactory, matchSeriesStoreFactory} from "../helpers/firebase/FirestoreCacheStoreFactory";
+    import Body from "../../../components/layout/Body.svelte";
+    import TeamCard from "../../../components/Players/TeamCard.svelte";
+    import TeamLogo from "../../../components/TeamLogo.svelte";
+    import Spinner from "../../../components/uikit/Spinner.svelte";
+    import Icon from "../../../components/uikit/Icon.svelte";
+    import CachedQuery from "../../../components/firebase/CachedQuery.svelte";
+    import {matchStoreFactory, matchSeriesStoreFactory} from "../../../helpers/firebase/FirestoreCacheStoreFactory";
+    import {getContext} from "svelte";
 
-    export let seasonNum;
+    const seasonNum = getContext("seasonNum")
     export let matchNum;
+    
 
     let weekMeta;
     let series;

@@ -1,10 +1,10 @@
 <script>
-    import Body from "../components/layout/Body.svelte";
+    import Body from "../../components/layout/Body.svelte";
     import {Tile} from "svelte-uikit3";
     import {Doc} from "sveltefire";
-    import TeamLogo from "../components/TeamLogo.svelte";
-    import Roster from "../components/Team/Roster.svelte";
-    import TeamStats from "../components/Team/TeamStats.svelte";
+    import TeamLogo from "../../components/TeamLogo.svelte";
+    import Roster from "../../components/Team/Roster.svelte";
+    import TeamStats from "../../components/Team/TeamStats.svelte";
 
     export let team_name;
     let team;

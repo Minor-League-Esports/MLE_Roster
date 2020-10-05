@@ -77,7 +77,7 @@ const setValue = (ref: any, currentLevel: string, val: any) => {
  * @param levels {String[]}
  * @returns {{}}
  */
-export async function coalesce(data: any[], ...levels: string[][]): Promise<any> {
+export function coalesce(data: any[], ...levels: string[][]): any {
     if (!data) return {};
     const output: any = {};
     const longest = Math.max(...levels.map(l => l.length));
@@ -126,7 +126,13 @@ export async function coalesce(data: any[], ...levels: string[][]): Promise<any>
 export function asyncReductionFactory(groups: string[][]) {
     return async (pP: Promise<object>, c: string[]) => {
         const p: any = await pP;
-        p[c[0]] = await coalesce(c, ...groups);
+        p[c[0]] = coalesce(c, ...groups);
+        return p;
+    }
+}
+export function reductionFactory(groups: string[][]){
+    return (p: any, c: string[]) => {
+        p[c[0]] = coalesce(c, ...groups);
         return p;
     }
 }
@@ -135,7 +141,22 @@ export function clean(label: string) {
     let output = label;
     if (output.startsWith("vs.")) output = output.substring(3);
     while (output.startsWith(" ")) output = output.substring(1);
+
     output = output.split(" ").join("_");
     output = output.split("-").join("_");
+
+    if(output === "NOTE:_NCPs_are_not_included_in_stats")
+        output = "NCPs";
     return output;
+}
+
+export function attachColumnOrdinals(object: any){
+    Object.entries(object).forEach(([key, value]:[string, any])=>{
+        if(typeof value === "object"){
+            object[key] = attachColumnOrdinals(object[key]);
+        }
+    });
+    return Object.assign(object, {
+        ordinal: Object.keys(object)
+    })
 }

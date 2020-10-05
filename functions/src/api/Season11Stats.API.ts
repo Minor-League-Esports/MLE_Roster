@@ -113,11 +113,7 @@ export async function getS11Stats(){
 
     const statSheetHeaders: string[][] = statSheetData.values?.splice(0, 2).map(ha => ha.map(h => sheets.clean(h))) ?? [];
     const statSheet = statSheetData.values ?? [];
-    const promises = [];
-    for (const s of statSheet) {
-        promises.push(sheets.coalesce(s, ...statSheetHeaders));
-    }
-    const rawStats = await Promise.all(promises);
+    const rawStats = statSheet.map(s => sheets.coalesce(s, ...statSheetHeaders))
 
     const stats = rawStats.reduce((obj, current) => {
         const match_id = current.Series.match_id;

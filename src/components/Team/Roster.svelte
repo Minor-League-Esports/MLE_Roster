@@ -55,14 +55,14 @@
         <dl class="uk-description-list">
             <dt>General Manager</dt>
             <dd>
-                <a href="/player/{team.leadership.General_Manager.mleid}" class="uk-link-reset" use:link>
+                <a href="/players/{team.leadership.General_Manager.mleid}" class="uk-link-reset" use:link>
                     {team.leadership.General_Manager.name}
                 </a>
             </dd>
             {#if team.leadership.Assistant_GM && team.leadership.Assistant_GM.mleid > 0}
                 <dt>Assistant General Manager</dt>
                 <dd>
-                    <a href="/player/{team.leadership.Assistant_GM.mleid}" class="uk-link-reset" use:link>
+                    <a href="/players/{team.leadership.Assistant_GM.mleid}" class="uk-link-reset" use:link>
                         {team.leadership.Assistant_GM.name}
                     </a>
                 </dd>
@@ -72,7 +72,7 @@
                 {#each team.leadership.Captain as cap}
                     {#if cap && cap.mleid > 0}
                         <dd>
-                            <a href="/player/{cap.mleid}" class="uk-link-reset" use:link>
+                            <a href="/players/{cap.mleid}" class="uk-link-reset" use:link>
                                 {cap.name}
                             </a>
                         </dd>
@@ -80,7 +80,7 @@
                 {/each}
             {:else if team.leadership.Captain && team.leadership.Captain.mleid > 0}
                 <dd>
-                    <a href="/player/{team.leadership.Captain.mleid}" class="uk-link-reset" use:link>
+                    <a href="/players/{team.leadership.Captain.mleid}" class="uk-link-reset" use:link>
                         {team.leadership.Captain.name}
                     </a>
                 </dd>
@@ -98,7 +98,7 @@
                     </li>
                     {#each players_by_league[league].filter(p => p.PLAYERS.Role.includes("Player")) as player}
                         <li>
-                            <a href="/player/{player.PLAYERS.MLEID}" use:link>
+                            <a href="/players/{player.PLAYERS.MLEID}" use:link>
                                 <Button style="text">
                                     {player.PLAYERS.Player} ({player.SALARY.Salary})
                                 </Button>
@@ -111,7 +111,7 @@
                     </li>
                     {#each players_by_league[league].filter(p => p.PLAYERS.Role.includes("Reserve")) as player}
                         <li>
-                            <a href="/player/{player.PLAYERS.MLEID}" use:link>
+                            <a href="/players/{player.PLAYERS.MLEID}" use:link>
                                 <Button style="text">
                                     {player.PLAYERS.Player} ({player.SALARY.Salary})
                                 </Button>

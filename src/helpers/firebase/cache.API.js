@@ -79,10 +79,12 @@ export const cache = {
      */
     set(key, value) {
         key = "mler_" + key;
-        localStorage.setItem(key, JSON.stringify(value));
-        let previousCacheIndex = JSON.parse(localStorage.getItem("mler_cache_index") || "[]");
-        if (!previousCacheIndex.includes(key)) previousCacheIndex.push(key);
-        localStorage.setItem("mler_cache_index", JSON.stringify(previousCacheIndex));
+        try{
+            localStorage.setItem(key, JSON.stringify(value));
+            let previousCacheIndex = JSON.parse(localStorage.getItem("mler_cache_index") || "[]");
+            if (!previousCacheIndex.includes(key)) previousCacheIndex.push(key);
+            localStorage.setItem("mler_cache_index", JSON.stringify(previousCacheIndex));
+        } catch{}
     }
 }
 

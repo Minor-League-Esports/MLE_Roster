@@ -14,7 +14,7 @@
 
 
     onMount(async () => {
-        league.players = await Promise.all(league.players.map(async p => Object.assign({}, await getPlayer(p.id), p)));
+        league.players = await Promise.all(league.players.map(async p => Object.assign({}, await getPlayer(p.id,firestore), p)));
         playersHaveLoaded = true;
         homeScore = league.games.filter(g => g.winner === league.home).length;
         awayScore = league.games.filter(g => g.winner === league.away).length;
@@ -47,7 +47,7 @@
         <div class="uk-width-3-4 uk-margin-auto">
             <h4>Players</h4>
             {#each league.players.filter(p => p.PLAYERS.Team === league.away) as player}
-                <a use:link href="/player/{player.id}">
+                <a use:link href="/players/{player.id}">
                     <Button style="primary" class="uk-margin-small" width="1-1">{player.PLAYERS.Player}
                         | {player.salary}
                         | {player.role}</Button>
@@ -57,7 +57,7 @@
         <div class="uk-width-3-4 uk-margin-auto">
             <h4>Players</h4>
             {#each league.players.filter(p => p.PLAYERS.Team === league.home) as player}
-                <a use:link href="/player/{player.id}">
+                <a use:link href="/players/{player.id}">
                     <Button style="primary" class="uk-margin-small" width="1-1">{player.PLAYERS.Player}
                         | {player.salary}
                         | {player.role}</Button>

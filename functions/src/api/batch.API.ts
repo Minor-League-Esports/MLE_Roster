@@ -4,13 +4,13 @@ const firestore = admin.firestore();
 
 let i = 0;
 
-async function writeBatch(documents: Batch){
+async function writeBatch(documents: Batch, opid: number){
     const batch = firestore.batch();
     documents.data.forEach((document: BatchData) => {
         if(document.key){
             batch.set(document.collection.doc(document.key), document.document, {merge: document.merge});
         } else {
-            console.log("Missing keypath on object!");
+            console.log(`BATCH | (${opid}) Missing keypath on object!`);
             console.log(document);
         }
     })
@@ -23,7 +23,7 @@ async function writeBatch(documents: Batch){
  */
 export async function writeBatches(...data: PrebatchData[]){
     const opid = i++;
-    console.log(`(${opid}) | Starting a write operation...`);
+    console.log(`BATCH | (${opid}) | Starting a write operation...`);
     const batch: Batch = new Batch([]);
     // Convert all the PrebatchDatas to BatchDatas and include in the Batch
     let batchSize = Number.MAX_SAFE_INTEGER;
@@ -35,7 +35,8 @@ export async function writeBatches(...data: PrebatchData[]){
                 collectionScopedData.keypath(document);
                 batch.data.push(new BatchData(collectionScopedData.collection, document, collectionScopedData.keypath(document), merge));
             } catch{
-                console.log("Error on keypath for document!")
+                debugger;
+                console.log(`BATCH | (${opid}) | Error on keypath for document!`)
                 console.log(document);
             }
         })
@@ -46,11 +47,11 @@ export async function writeBatches(...data: PrebatchData[]){
     // documents.forEach(b => promises.push(writeBatch(b)));
     // await Promise.all(promises);
     // Run in sequence
-    console.log(`(${opid}) | Batching with a max of ${batchSize} documents`);
+    console.log(`BATCH | (${opid}) | Batching with a max of ${batchSize} documents`);
     const documents: Batch[] = batch.getChunks(batchSize);
-    console.log(`(${opid}) | Using ${documents.length} batch(es)`);
+    console.log(`BATCH | (${opid}) | Using ${documents.length} batch(es)`);
     for(const document of documents){
-        await writeBatch(document); //eslint-disable-line no-await-in-loop
+        await writeBatch(document, opid); //eslint-disable-line no-await-in-loop
     }
-    console.log(`(${opid}) | Done writing`);
+    console.log(`BATCH | (${opid}) | Done writing`);
 }

@@ -79,9 +79,9 @@ export const getAllPlayers = async (firestore=false) => {
 
     return data;
 }
-export const getPlayer = async player_id => {
+export const getPlayer = async (player_id, firestore = false) => {
     // getPlayers will create the cache if needed
-    let players = await getAllPlayers();
+    let players = await getAllPlayers(firestore);
     return players.filter(p => p.id === player_id)[0] || undefined;
 }
 

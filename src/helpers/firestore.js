@@ -15,3 +15,10 @@ export function attachId(documentRef) {
         documentRef.data()
     );
 }
+export function unclean(title){
+    const words = title.split(/[_ ]/g);
+    return words.map(word => {
+        return word.charAt(0) + word.slice(1).toLowerCase()
+    }).join(" ");
+
+}

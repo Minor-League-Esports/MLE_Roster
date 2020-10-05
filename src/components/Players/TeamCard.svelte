@@ -7,7 +7,7 @@
     export let logoHeight = "8em";
 </script>
 
-<a href="/team/{team}" use:link class="uk-width-{width} {team.toLowerCase()}">
+<a href="/teams/{team}" use:link class="uk-width-{width} {team.toLowerCase()}">
     <article class="uk-tile uk-preserve-color uk-flex uk-flex-column uk-flex-middle uk-box-shadow-hover-large">
         <TeamLogo height={logoHeight} includeBorder={true}/>
         <h2>{team}</h2>

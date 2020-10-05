@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clean = exports.asyncReductionFactory = exports.coalesce = exports.letterToColumn = exports.columnToLetter = exports.sheetValues = exports.sheetMeta = void 0;
+exports.attachColumnOrdinals = exports.clean = exports.reductionFactory = exports.asyncReductionFactory = exports.coalesce = exports.letterToColumn = exports.columnToLetter = exports.sheetValues = exports.sheetMeta = void 0;
 const googleapis_1 = require("googleapis");
 const functions = require("firebase-functions");
 const sheets = googleapis_1.google.sheets({
@@ -76,7 +76,7 @@ const setValue = (ref, currentLevel, val) => {
  * @param levels {String[]}
  * @returns {{}}
  */
-async function coalesce(data, ...levels) {
+function coalesce(data, ...levels) {
     if (!data)
         return {};
     const output = {};
@@ -129,11 +129,18 @@ exports.coalesce = coalesce;
 function asyncReductionFactory(groups) {
     return async (pP, c) => {
         const p = await pP;
-        p[c[0]] = await coalesce(c, ...groups);
+        p[c[0]] = coalesce(c, ...groups);
         return p;
     };
 }
 exports.asyncReductionFactory = asyncReductionFactory;
+function reductionFactory(groups) {
+    return (p, c) => {
+        p[c[0]] = coalesce(c, ...groups);
+        return p;
+    };
+}
+exports.reductionFactory = reductionFactory;
 function clean(label) {
     let output = label;
     if (output.startsWith("vs."))
@@ -142,7 +149,20 @@ function clean(label) {
         output = output.substring(1);
     output = output.split(" ").join("_");
     output = output.split("-").join("_");
+    if (output === "NOTE:_NCPs_are_not_included_in_stats")
+        output = "NCPs";
     return output;
 }
 exports.clean = clean;
+function attachColumnOrdinals(object) {
+    Object.entries(object).forEach(([key, value]) => {
+        if (typeof value === "object") {
+            object[key] = attachColumnOrdinals(object[key]);
+        }
+    });
+    return Object.assign(object, {
+        ordinal: Object.keys(object)
+    });
+}
+exports.attachColumnOrdinals = attachColumnOrdinals;
 //# sourceMappingURL=sheets.js.map

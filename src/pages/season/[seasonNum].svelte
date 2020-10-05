@@ -1,10 +1,10 @@
 <script>
     import {Card, Flex, uk_width} from "svelte-uikit3";
-    import {seasonStoreFactory} from "../helpers/firebase/FirestoreCacheStoreFactory";
+    import {seasonStoreFactory} from "../../helpers/firebase/FirestoreCacheStoreFactory";
     import {link} from "svelte-routing";
     import {fade} from "svelte/transition";
-    import Body from "../components/layout/Body.svelte";
-    import CachedQuery from "../components/firebase/CachedQuery.svelte";
+    import Body from "../../components/layout/Body.svelte";
+    import CachedQuery from "../../components/firebase/CachedQuery.svelte";
 
     export let seasonNum;
     let season = {};

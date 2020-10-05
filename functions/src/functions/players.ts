@@ -3,13 +3,14 @@ import * as admin from "firebase-admin";
 const firestore = admin.firestore();
 import * as playerAPI from "../api/players.API";
 import * as batchAPI from "../api/batch.API";
+import * as playerStatsAPI from "../api/PlayerStats.API";
 import {PrebatchData} from "../models/BatchModels";
 
 
 export async function updatePlayers() {
     const [directory, games, ineligible] = await playerAPI.getPlayerDirectory();
     const [mleIds, currentRanks] = await playerAPI.getReferenceData();
-
+    const statsObj = await playerStatsAPI.getStats();
     const collection = firestore.collection("players");
 
     const docs = Object.entries(directory).map(([mleid, data]: [string, any]) => {
@@ -32,7 +33,8 @@ export async function updatePlayers() {
             games: gameData,
             meta: player_meta,
             ranks,
-            eligible: !Object.keys(ineligible).includes(mleid)
+            eligible: !Object.keys(ineligible).includes(mleid),
+            stats: statsObj[mleid]
         }, data)
     });
     await batchAPI.writeBatches(new PrebatchData(collection, docs, (a: any) => a.meta.MLEID));

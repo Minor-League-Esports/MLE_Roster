@@ -16,6 +16,7 @@
 
     export let style = "";
     export let size = "";
+    export let singleLine = false;
 
     $: {
         classes = ["uk-button"];
@@ -40,9 +41,14 @@
 
 
 <button class={classes.join(" ") + " " + _class} on:focus on:blur on:focusin on:focusout on:click on:dblclick on:mouseenter
-        on:mouseleave on:auxclick use:uk_width={width}>
+        on:mouseleave on:auxclick use:uk_width={width} class:singleLine>
     <slot>
         {text}
     </slot>
 </button>
 
+<style lang="scss">
+    .singleLine{
+        text-wrap:none;
+    }
+</style>

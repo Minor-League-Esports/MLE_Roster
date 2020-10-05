@@ -1,16 +1,17 @@
 <script>
-    import Body from "../components/layout/Body.svelte";
+    import {playerStoreFactory} from "../../helpers/firebase/FirestoreCacheStoreFactory";
+    import Body from "../../components/layout/Body.svelte";
     import {Tile, Flex, Alert, Button} from "svelte-uikit3";
-    import {Doc} from "sveltefire";
     import {onMount} from "svelte";
     import {link} from "svelte-routing";
-    import ProfileLink from "../components/Player/ProfileLink.svelte";
-    import ProfileLinkSet from "../components/Player/ProfileLinkSet.svelte";
-    import BallchasingStream from "../components/Player/BallchasingStream.svelte";
-    import MiscInfo from "../components/Player/MiscInfo.svelte";
-    import Links from "../components/Player/Links.svelte";
-    import Eligibility from "../components/Player/Eligibility.svelte";
-    import TeamLogo from "../components/TeamLogo.svelte";
+    import ProfileLink from "../../components/Player/ProfileLink.svelte";
+    import ProfileLinkSet from "../../components/Player/ProfileLinkSet.svelte";
+    import BallchasingStream from "../../components/Player/BallchasingStream.svelte";
+    import MiscInfo from "../../components/Player/MiscInfo.svelte";
+    import Links from "../../components/Player/Links.svelte";
+    import Eligibility from "../../components/Player/Eligibility.svelte";
+    import TeamLogo from "../../components/TeamLogo.svelte";
+    import CachedQuery from "../../components/firebase/CachedQuery.svelte";
 
     export let mleid = "";
     let data;
@@ -36,8 +37,7 @@
 </script>
 
 <Body width="5-6" section="{false}">
-
-<Doc path="players/{mleid}" let:data={data} on:data={(e) => data = e.detail.data} once={true}>
+<CachedQuery store={playerStoreFactory(mleid)} let:data={data} on:data={(e) => data = e.detail.data}>
     {#if data && !data.ACCOUNTS}
         <Alert style="warning" title="Player is missing a main account!">
             <span/>
@@ -79,7 +79,7 @@
                                id={data.ACCOUNTS.Main_Profile.id}/>
         {/if}
     </Tile>
-</Doc>
+</CachedQuery>
 </Body>
 
 <style lang="scss">

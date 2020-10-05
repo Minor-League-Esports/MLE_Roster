@@ -1,17 +1,17 @@
 <script>
     import {fade} from "svelte/transition";
     import {Tile, Flex, uk_width, Drop, Button, ButtonGroup} from "svelte-uikit3";
-    import Icon from "../components/uikit/Icon.svelte";
-    import Body from "../components/layout/Body.svelte";
+    import Icon from "../../components/uikit/Icon.svelte";
+    import Body from "../../components/layout/Body.svelte";
     import {collectionStore} from "sveltefire";
     import {getContext, onDestroy, onMount} from "svelte";
     import {link} from "svelte-routing";
-    import Spinner from "../components/uikit/Spinner.svelte";
-    import FilterPanel from "../components/Players/FilterPanel.svelte";
-    import {filterPlayers, getAllPlayers} from "../components/Players/playersHelpers";
-    import PageControl from "../components/PageControl.svelte";
-    import TeamLogo from "../components/TeamLogo.svelte";
-    import {playerStoreFactory} from "../helpers/firebase/FirestoreCacheStoreFactory";
+    import Spinner from "../../components/uikit/Spinner.svelte";
+    import FilterPanel from "../../components/Players/FilterPanel.svelte";
+    import {filterPlayers, getAllPlayers} from "../../components/Players/playersHelpers";
+    import PageControl from "../../components/PageControl.svelte";
+    import TeamLogo from "../../components/TeamLogo.svelte";
+    import {allPlayersStoreFactory} from "../../helpers/firebase/FirestoreCacheStoreFactory";
 
     $: [players, pages] = filterPlayers(_players, order, asc, query, pageSize, pages, page, minSalary, maxSalary, team)
     $: if (order || asc || query || pageSize || minSalary || maxSalary || team) page = 0;
@@ -25,7 +25,7 @@
         page = 0;
     };
 
-    let _playersPromise = playerStoreFactory();
+    let _playersPromise = allPlayersStoreFactory();
     let _players = [];
     let players = [];
     let teams = [], team = "";
@@ -103,7 +103,7 @@
     <Spinner show={loading}/>
     {#if players}
         {#each players as player, i (player.PLAYERS.MLEID)}
-            <a use:link href="/player/{player.PLAYERS.MLEID}" use:uk_width={"1-1"} class="uk-link-reset" in:fade>
+            <a use:link href="/players/{player.PLAYERS.MLEID}" use:uk_width={"1-1"} class="uk-link-reset" in:fade>
                 <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-box-shadow-hover-medium uk-tile uk-tile-primary uk-preserve-color {player.PLAYERS.Team.toLowerCase()}">
                     <Flex justification="between" alignment="middle">
                         <Flex alignment="middle">

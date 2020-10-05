@@ -35,18 +35,34 @@
 </Card>
 <Card width="1-1" class="uk-margin-medium">
     <h2 slot="header">Season Info Lookup</h2>
+    <h3 class="uk-text-center">Season 11</h3>
+    <hr class="uk-width-3-4 uk-margin-auto"/>
     <Flex direction="column" class="uk-margin-small" alignment="middle">
         <a use:link href="/season/11" class="uk-width-3-4 uk-width-1-3@m">
             <Button width="1-1">
                 <Icon icon="calendar"/>
-                Season 11 Series Stats
+                Series Stats By Match
+            </Button>
+        </a>
+        <hr class="uk-width-1-2"/>
+        <a use:link href="/detail/teamstats" class="uk-width-3-4 uk-width-1-3@m">
+            <Button width="1-1">
+                <Icon icon="calendar"/>
+                Aggregate Stats By Team
+            </Button>
+        </a>
+        <hr class="uk-width-1-2"/>
+        <a use:link href="/detail/playerstats" class="uk-width-3-4 uk-width-1-3@m">
+            <Button width="1-1">
+                <Icon icon="calendar"/>
+                Aggregate Stats By Player
             </Button>
         </a>
         <hr class="uk-width-1-2"/>
         <a use:link href="/season/11/standings" class="uk-width-3-4 uk-width-1-3@m">
             <Button width="1-1">
                 <Icon icon="list"/>
-                Season 11 Standings
+                Team Standings
             </Button>
         </a>
     </Flex>

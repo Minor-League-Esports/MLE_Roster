@@ -4,7 +4,7 @@ exports.updateTeams = void 0;
 const admin = require("firebase-admin");
 const firestore = admin.firestore();
 const teamsAPI = require("../api/teams.API");
-const combinedStatsAPI = require("../api/CombinedStats.API");
+const teamStatsAPI = require("../api/TeamStats.API");
 const batchAPI = require("../api/batch.API");
 const BatchModels_1 = require("../models/BatchModels");
 const assignRosters = (players) => {
@@ -27,7 +27,7 @@ const assignRosters = (players) => {
 };
 async function updateTeams(players) {
     const [seasonStats, teamMeta, teamLeadership, rosters] = await Promise.all([
-        combinedStatsAPI.getStats(),
+        teamStatsAPI.getStats(),
         teamsAPI.getTeamMeta(),
         teamsAPI.getTeamLeadership(players),
         assignRosters(players)

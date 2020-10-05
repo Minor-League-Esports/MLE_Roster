@@ -62,11 +62,21 @@ function FirestoreCacheStoreFactory({queryFn, key, preprocessFn = (a)=>a, isDoc 
     )
 }
 
-export const playerStoreFactory = () =>
+export const allPlayersStoreFactory = () =>
     FirestoreCacheStoreFactory({
         queryFn: getFirestoreFromContext().collection("players").orderBy("PLAYERS.Player"),
         key: "all_players"
     });
+
+export const playerStoreFactory = (playerId) =>
+    FirestoreCacheStoreFactory({
+        queryFn: getFirestoreFromContext().collection("players").doc(playerId),
+        key: `player_${playerId}`,
+        parentCollectionKey: "all_players",
+        id: playerId,
+        isDoc: true
+    })
+
 export const teamStoreFactory = () =>
     FirestoreCacheStoreFactory({
             queryFn: getFirestoreFromContext().collection("teams"),

@@ -105,11 +105,7 @@ async function getS11Stats() {
     ]))[0];
     const statSheetHeaders = (_f = (_e = statSheetData.values) === null || _e === void 0 ? void 0 : _e.splice(0, 2).map(ha => ha.map(h => sheets.clean(h)))) !== null && _f !== void 0 ? _f : [];
     const statSheet = (_g = statSheetData.values) !== null && _g !== void 0 ? _g : [];
-    const promises = [];
-    for (const s of statSheet) {
-        promises.push(sheets.coalesce(s, ...statSheetHeaders));
-    }
-    const rawStats = await Promise.all(promises);
+    const rawStats = statSheet.map(s => sheets.coalesce(s, ...statSheetHeaders));
     const stats = rawStats.reduce((obj, current) => {
         const match_id = current.Series.match_id;
         const gameNum = parseInt(current.Series_Game.game_num) - 1;

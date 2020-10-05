@@ -1,10 +1,10 @@
 <script>
-    import Body from "../components/layout/Body.svelte";
-    import RosterFilterPanel from "../components/Detail/Roster/RosterFilterPanel.svelte";
-    import CachedQuery from "../components/firebase/CachedQuery.svelte";
-    import {teamStoreFactory} from "../helpers/firebase/FirestoreCacheStoreFactory";
-    import PlayerMapper from "../components/Detail/Roster/PlayerMapper.svelte";
-    import TeamRosterRow from "../components/Detail/Roster/TeamRosterRow.svelte";
+    import Body from "../../components/layout/Body.svelte";
+    import RosterFilterPanel from "../../components/Detail/TeamFilterPanel.svelte";
+    import CachedQuery from "../../components/firebase/CachedQuery.svelte";
+    import {teamStoreFactory} from "../../helpers/firebase/FirestoreCacheStoreFactory";
+    import PlayerMapper from "../../components/Detail/Roster/PlayerMapper.svelte";
+    import TeamRosterRow from "../../components/Detail/Roster/TeamRosterRow.svelte";
 
 
     let currentLeague = "";
@@ -16,7 +16,7 @@
 <h1>Compare Team Rosters</h1>
 <CachedQuery store={teamStoreFactory()} let:data={allTeams}>
     <RosterFilterPanel bind:league={currentLeague} {allTeams} bind:selectedTeams/>
-    <table class="uk-table uk-width-1-1@m uk-width-3-4 uk-text-center uk-table-divider uk-table-responsive">
+    <table class="uk-table uk-width-1-1@m uk-width-3-4 uk-text-center uk-table-divider uk-table-responsive uk-margin-auto">
         <thead>
         <tr>
             <th class="uk-text-center"></th>

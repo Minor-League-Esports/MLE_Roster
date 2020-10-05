@@ -38,14 +38,14 @@ export async function getPlayerDirectory(): Promise<[any, any, any]> {
     const ineligible = new Sheet(ineligibleHeaders, ineligibleValues.values ?? []);
 
     // Ignoring overload because the reduce function does not need the additional parameters to function.
-    return Promise.all([
+    return [
             // @ts-ignore
-            directory.data.reduce(sheets.asyncReductionFactory(directory.headers), {}),
+            directory.data.reduce(sheets.reductionFactory(directory.headers), {}),
             // @ts-ignore
-            games.data.reduce(sheets.asyncReductionFactory(games.headers), {}),
+            games.data.reduce(sheets.reductionFactory(games.headers), {}),
             // @ts-ignore
-            ineligible.data.reduce(sheets.asyncReductionFactory(ineligible.headers), {}),
-        ]);
+            ineligible.data.reduce(sheets.reductionFactory(ineligible.headers), {}),
+        ];
 }
 
 export async function getReferenceData(): Promise<[any, any]> {
@@ -75,8 +75,8 @@ export async function getReferenceData(): Promise<[any, any]> {
         // @ts-ignore
         mleids.values.reduce(sheets.asyncReductionFactory(mleid_labels), {}),
         // @ts-ignore
-        currentRanks.values.reduce(async (pP: Promise<object>, c: string[])=>{
-            const [obj, p]: [any, any] = await Promise.all([sheets.coalesce(c, ...currentRank_labels), pP]);
+        currentRanks.values.reduce((p: any, c: string[])=>{
+            const obj: any = sheets.coalesce(c, ...currentRank_labels)
             if(!Object.keys(p).includes(c[0])) p[c[0]] = {};
             p[c[0]][obj["Tracker_ID"]] = obj;
             return p;

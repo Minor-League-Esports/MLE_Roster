@@ -559,3 +559,8 @@
     --background-color: var(--home-primary);
     --color: var(--home-accent);
 }
+
+.force-team-colors {
+    background-color: var(--background-color);
+    color: var(--color);
+}
