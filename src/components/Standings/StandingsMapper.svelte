@@ -16,12 +16,12 @@
                 else if (t1wp < t2wp) return 1;
                 else return 0;
             }).map((team, index) => {
-                const wins = team.standings[`s${seasonNum}`][league].win;
-                if(wins < currentHighest){
-                    currentHighest = team.standings[`s${seasonNum}`][league].win;
+                const winp = parseFloat(team.stats[`s${seasonNum}`][league].GENERAL_TEAM_STATS["Win_%"].replace("%",""));
+                if(winp < currentHighest){
+                    currentHighest = winp;
                     currentPosition = index + 1;
                     team.standing = currentPosition;
-                } else if (wins === currentHighest){
+                } else if (winp === currentHighest){
                     team.standing = currentPosition;
                 } else {
                     team.standing = index + 1;

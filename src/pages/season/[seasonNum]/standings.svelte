@@ -13,7 +13,7 @@
 
     const seasonNum = getContext("seasonNum");
     let _teams;
-    let league = "";
+    let league = "foundation";
 
 
 </script>

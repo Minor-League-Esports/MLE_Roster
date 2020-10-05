@@ -7,7 +7,7 @@ export const cache = {
      */
     async getLastUpdated(firestore = null) {
         if (!firestore) firestore = getFirestoreFromContext();
-        const lastLookup = new Date(localStorage.getItem("mler_cache_check_ttl") || 0);
+        const lastLookup = new Date(JSON.parse(localStorage.getItem("mler_cache_check_ttl"))|| 0);
         if (lastLookup !== new Date(0) && lastLookup < new Date().setMinutes(new Date().getMinutes() - 1)) {
             // lastLookup is not epoch and is more than 1 minute in the past
             console.debug("MLER | CACHE | Getting last updated date...");
