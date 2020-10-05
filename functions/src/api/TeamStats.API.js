@@ -2,12 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getStats = void 0;
 const sheets = require("../helpers/sheets");
-const sheets_1 = require("../helpers/sheets");
 async function getSeasonStats(data, labels, season, league) {
     if (labels[1][0] === "Teams")
         labels[1][0] = "Team"; // TODO: Unhackify this
     return data.reduce((p, c) => {
-        const team = sheets_1.attachColumnOrdinals(sheets.coalesce(c, ...labels));
+        const team = sheets.attachColumnOrdinals(sheets.coalesce(c, ...labels));
         if (!p.hasOwnProperty(team.Team))
             p[team.Team] = {};
         if (!p[team.Team].hasOwnProperty("stats"))

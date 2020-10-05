@@ -99,9 +99,7 @@ async function updateS11Schedule() {
 }
 exports.updateS11Schedule = updateS11Schedule;
 async function updateS11Standings(stats) {
-    console.log(`Inputting data for ${stats.reduce((r, c) => r + c.documents.length, 0)} results`);
     const data = BatchModels_1.PrebatchData.deconstruct(stats);
-    console.log(`Deconstruction yielded ${data.length} results`);
     const teamScores = {};
     data.forEach((match) => {
         const homeTeam = match.home;

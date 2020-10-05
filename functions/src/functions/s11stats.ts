@@ -90,9 +90,7 @@ export async function updateS11Schedule() {
 }
 
 export async function updateS11Standings(stats: PrebatchData[]) {
-    console.log(`Inputting data for ${stats.reduce((r:number, c:PrebatchData)=> r + c.documents.length,0)} results`);
     const data = PrebatchData.deconstruct(stats);
-    console.log(`Deconstruction yielded ${data.length} results`)
     const teamScores: any = {};
     data.forEach((match: any) => {
         const homeTeam: string = match.home;

@@ -2,8 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Serializable = void 0;
 class Serializable {
-    constructor() { }
-    ;
     get json() { return JSON.stringify(this); }
     /* This wacky wavy typing is to allow us to return the child class type */
     static fromJSON(json) {
@@ -15,7 +13,7 @@ class Serializable {
         else {
             jsonObj = json;
         }
-        for (let propName in jsonObj) {
+        for (const propName in jsonObj) {
             // @ts-ignore
             output[propName] = jsonObj[propName];
         }

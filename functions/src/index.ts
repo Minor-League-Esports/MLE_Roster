@@ -9,6 +9,7 @@ import * as database from "./functions/database";
 import {pubsubClient} from "./helpers/pubsub";
 import {Job} from "./models/JobModels/Job";
 import {JobRouter} from "./models/JobModels/JobRouter";
+import {directoryJobChain} from "./models/JobModels/Jobs";
 
 
 // // Start writing Firebase Functions

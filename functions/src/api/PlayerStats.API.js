@@ -7,7 +7,7 @@ async function getStats() {
     const playerSheetId = "1hrWaUm4T_3cajBxMoLuAVOrLxgEX1fLmKrGznyj8UNE";
     const playerStatAllMeta = await sheets.sheetMeta(playerSheetId, ["Player Stats"]);
     const playerStatMeta = (_b = ((_a = playerStatAllMeta.sheets) !== null && _a !== void 0 ? _a : [])[0].properties) === null || _b === void 0 ? void 0 : _b.gridProperties;
-    if (typeof playerStatMeta === "undefined") {
+    if (typeof playerStatMeta === "undefined" || !playerStatMeta.columnCount || !playerStatMeta.frozenRowCount) {
         throw new Error("Player Stat Sheet Metadata is undefined!");
     }
     const [playerStatSheet] = await sheets.sheetValues(playerSheetId, [

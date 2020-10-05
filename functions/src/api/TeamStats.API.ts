@@ -1,10 +1,9 @@
 import * as sheets from "../helpers/sheets";
-import {attachColumnOrdinals} from "../helpers/sheets";
 
 async function getSeasonStats(data: any, labels: string[][], season: string, league: string) {
     if(labels[1][0] === "Teams") labels[1][0] = "Team"; // TODO: Unhackify this
     return data.reduce((p: any, c: any) => {
-        const team = attachColumnOrdinals(sheets.coalesce(c, ...labels));
+        const team = sheets.attachColumnOrdinals(sheets.coalesce(c, ...labels));
         if (!p.hasOwnProperty(team.Team)) p[team.Team] = {};
         if (!p[team.Team].hasOwnProperty("stats")) p[team.Team].stats = {};
         if (!p[team.Team].stats.hasOwnProperty(season)) p[team.Team].stats[season] = {};

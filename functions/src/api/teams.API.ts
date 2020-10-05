@@ -1,6 +1,5 @@
 import * as sheets from "../helpers/sheets"
 import * as mleMeta from "../helpers/mleMeta";
-import {reductionFactory} from "../helpers/sheets";
 
 export async function getTeamMeta(): Promise<any> {
     const DIRECTORY_SHEET = "13yPS53Oe4B97pRsPM9bV4GFvs6b_nZ6KiqPqjCQDb6E";
@@ -9,7 +8,7 @@ export async function getTeamMeta(): Promise<any> {
     const [detailedRoster] = await sheets.sheetValues(DIRECTORY_SHEET, ["Rosters (Detailed)!B95:D127"]);
     const roster_labels: any[][] = detailedRoster.values?.splice(0, 1).map((a: any[]) => a.map(sheets.clean)) ?? [];
     // @ts-ignore
-    return detailedRoster.values?.reduce(reductionFactory(roster_labels), {}) ?? {};
+    return detailedRoster.values?.reduce(sheets.reductionFactory(roster_labels), {}) ?? {};
 }
 
 export async function getTeamLeadership(players: any[]): Promise<any> {
