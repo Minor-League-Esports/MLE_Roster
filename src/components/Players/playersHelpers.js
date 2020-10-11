@@ -1,6 +1,20 @@
 import {cache} from "../../helpers/firebase/cache.API";
 import {attachId, getFirestoreFromContext} from "../../helpers/firestore";
 
+/**
+ *
+ * @param player {any}
+ */
+export const getMaxCurrentSalary = (player) => {
+    let output = Number.MIN_SAFE_INTEGER;
+    for(let accountId in player.ranks){
+        const doubles = parseInt(player.ranks[accountId]["2s_MMR"]);
+        const standard = parseInt(player.ranks[accountId]["3s_MMR"]);
+        if(doubles > output) output = doubles;
+        if(standard > output) output = standard;
+    }
+    return output;
+}
 
 /**
  *
@@ -13,12 +27,17 @@ import {attachId, getFirestoreFromContext} from "../../helpers/firestore";
  * @param page {int}
  * @param minSalary {int}
  * @param maxSalary {int}
+ * @param minMMR {int}
+ * @param maxMMR {int}
  */
-export const filterPlayers = (input, order, asc, query, pageSize, pages, page, minSalary, maxSalary, team) => {
+export const filterPlayers = (input, order, asc, query, pageSize, pages, page, minSalary, maxSalary, team, minMMR, maxMMR) => {
     let output = input.filter(item => {
+        const maxCurrentSalary = getMaxCurrentSalary(item);
         try {
             return item.PLAYERS.Player.toLowerCase().startsWith(query.toLowerCase())
                 && parseFloat(item.SALARY.Salary) >= minSalary && parseFloat(item.SALARY.Salary) <= maxSalary
+                && (order !== "currentmmr" || maxCurrentSalary !== Number.MIN_SAFE_INTEGER)
+                && maxCurrentSalary >= minMMR && maxCurrentSalary <= maxMMR
                 && (item.PLAYERS.Team === team || team === "")
         } catch (e) {
             console.debug(e);
@@ -29,20 +48,17 @@ export const filterPlayers = (input, order, asc, query, pageSize, pages, page, m
     switch (order) {
         case "salary":
             output = output.sort(
-                (a, b) => parseFloat(a.SALARY.Salary) < parseFloat(b.SALARY.Salary)
-                    ? -1 * mod
-                    : parseFloat(a.SALARY.Salary) === parseFloat(b.SALARY.Salary)
-                        ? 0
-                        : mod
+                (a, b) => (parseFloat(a.SALARY.Salary) - parseFloat(b.SALARY.Salary)) * mod
             );
             break;
         case "peakmmr":
             output = output.sort(
-                (a, b) => parseInt(a.SALARY.Peak_MMR) < parseInt(b.SALARY.Peak_MMR)
-                    ? -1 * mod
-                    : parseInt(a.SALARY.Peak_MMR) === parseInt(b.SALARY.Peak_MMR)
-                        ? 0
-                        : mod
+                (a, b) => (parseInt(a.SALARY.Peak_MMR) - parseInt(b.SALARY.Peak_MMR)) * mod
+            );
+            break;
+        case "currentmmr":
+            output = output.filter(p => p.ranks && Object.keys(p.ranks).length).sort(
+                (a, b) => (getMaxCurrentSalary(a) - getMaxCurrentSalary(b)) * mod
             );
             break;
         default:

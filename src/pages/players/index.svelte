@@ -8,13 +8,13 @@
     import {link} from "svelte-routing";
     import Spinner from "../../components/uikit/Spinner.svelte";
     import FilterPanel from "../../components/Players/FilterPanel.svelte";
-    import {filterPlayers, getAllPlayers} from "../../components/Players/playersHelpers";
+    import {filterPlayers, getAllPlayers, getMaxCurrentSalary} from "../../components/Players/playersHelpers";
     import PageControl from "../../components/PageControl.svelte";
     import TeamLogo from "../../components/TeamLogo.svelte";
     import {allPlayersStoreFactory} from "../../helpers/firebase/FirestoreCacheStoreFactory";
 
-    $: [players, pages] = filterPlayers(_players, order, asc, query, pageSize, pages, page, minSalary, maxSalary, team)
-    $: if (order || asc || query || pageSize || minSalary || maxSalary || team) page = 0;
+    $: [players, pages] = filterPlayers(_players, order, asc, query, pageSize, pages, page, minSalary, maxSalary, team, minMMR, maxMMR)
+    $: if (order || asc || query || pageSize || minSalary || maxSalary || team || minMMR || maxMMR) page = 0;
     const setOrder = newOrder => {
         if (newOrder === order) {
             asc = !asc;
@@ -24,6 +24,7 @@
         }
         page = 0;
     };
+    const notificationStore = getContext("notificationStore");
 
     let _playersPromise = allPlayersStoreFactory();
     let _players = [];
@@ -39,6 +40,12 @@
     let minSalary = _minSalary.toFixed(1);
     let maxSalary = _maxSalary.toFixed(1);
 
+    // MMRs
+    let _minMMR = 0;
+    let _maxMMR = 0;
+
+    let minMMR = _minMMR;
+    let maxMMR = _minMMR;
 
     // Sorting / Filtering
     let query = "";
@@ -55,11 +62,30 @@
         _players = v;
         teams = [...new Set(v.map(p => p.PLAYERS.Team))].sort();
         loading = false;
-        _minSalary = Math.min(...v.map(p => p.SALARY.Salary));
-        _maxSalary = Math.max(...v.map(p => p.SALARY.Salary));
+        const all_salaries = [...v.map(p => p.SALARY.Salary)]
+        _minSalary = Math.min(...all_salaries);
+        _maxSalary = Math.max(...all_salaries);
+        const all_mmrs = [...v.map(p => getMaxCurrentSalary(p))].filter(v => v > Number.MIN_SAFE_INTEGER);
+        _minMMR = Math.min(...all_mmrs);
+        _maxMMR = Math.max(...all_mmrs);
+        minMMR = _minMMR;
+        maxMMR = _maxMMR;
     });
 
     onDestroy(()=>unsub)
+
+    let currentMMRHasBeenNotified = false;
+    function currentMMRNotification(){
+        if(!currentMMRHasBeenNotified){
+            notificationStore.set({
+                message: "Current MMR may not show all players, and may not be accurate due to issues with the Psyonix API.",
+                status: "warning",
+                timeout: 10000,
+            })
+        }
+        currentMMRHasBeenNotified = true;
+        return true;
+    }
 
 </script>
 
@@ -78,24 +104,24 @@
             <Button style={order === "name" ? "primary" : "default"} on:click={()=>setOrder("name")} class="uk-text-nowrap">
                 Name
                 {#if order === "name"}
-                    <Icon icon={asc ? "chevron-up" : "chevron-down"}/>
+                    <Icon icon={asc ? "chevron-down" : "chevron-up"}/>
                 {/if}
             </Button>
             <Button style={order === "salary" ? "primary" : "default"} on:click={()=>setOrder("salary")} class="uk-text-nowrap">
                 Salary
                 {#if order === "salary"}
-                    <Icon icon={asc ? "chevron-up" : "chevron-down"}/>
+                    <Icon icon={asc ? "chevron-down" : "chevron-up"}/>
                 {/if}
             </Button>
-            <Button style={order === "peakmmr" ? "primary" : "default"} on:click={()=>setOrder("peakmmr")} class="uk-text-nowrap">
-                Peak MMR
-                {#if order === "peakmmr"}
-                    <Icon icon={asc ? "chevron-up" : "chevron-down"}/>
+            <Button style={order === "currentmmr" ? "primary" : "default"} on:click={()=>currentMMRNotification() && setOrder("currentmmr")} class="uk-text-nowrap">
+                Current MMR
+                {#if order === "currentmmr"}
+                    <Icon icon={asc ? "chevron-down" : "chevron-up"}/>
                 {/if}
             </Button>
         </ButtonGroup>
     </div>
-    <FilterPanel {_maxSalary} {_minSalary} {teams} bind:team bind:maxSalary bind:minSalary/>
+    <FilterPanel {_maxSalary} {_minSalary} {_minMMR} {_maxMMR} {teams} bind:team bind:maxSalary bind:minSalary bind:minMMR bind:maxMMR/>
 </div>
 <PageControl {pages} bind:page/>
 <hr class="uk-width-1-1 uk-margin-small"/>

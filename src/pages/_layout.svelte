@@ -2,14 +2,17 @@
     import FirebaseInit from "../components/FirebaseInit.svelte";
     import Header from "../components/layout/Header.svelte";
     import TransitionDecorator from "../components/layout/TransitionDecorator.svelte"
+    import NotificationWrapper from "../components/uikit/NotificationWrapper.svelte";
 </script>
 
 <FirebaseInit>
-    <Header/>
+    <NotificationWrapper>
+        <Header/>
 
-    <div class="uk-position-relative">
-        <slot decorator={TransitionDecorator}/>
-    </div>
+        <div class="uk-position-relative">
+            <slot decorator={TransitionDecorator}/>
+        </div>
+    </NotificationWrapper>
 </FirebaseInit>
 
 <style>

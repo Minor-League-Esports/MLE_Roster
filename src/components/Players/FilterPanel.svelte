@@ -5,6 +5,8 @@
 
     export let minSalary, _minSalary;
     export let maxSalary, _maxSalary;
+    export let minMMR, _minMMR;
+    export let maxMMR, _maxMMR;
     export let team, teams = [];
 
     let current = "";
@@ -28,11 +30,13 @@
 
     }
 
-    function forceRange(v, min, max) {
-        if (v < min) return min.toFixed(1);
-        if (v > max) return max.toFixed(1);
-        return v.toFixed(1);
+    function forceRange(v, min, max, decimals=1) {
+        if (v < min) return min.toFixed(decimals);
+        if (v > max) return max.toFixed(decimals);
+        return v.toFixed(decimals);
     }
+
+    let currentMMRIssueAcknowledged = false;
 
 </script>
 
@@ -103,6 +107,29 @@
                         {/each}
                     </optgroup>
                 </select>
+            </div>
+            <hr class="uk-width-1-1"/>
+            <div class="uk-width-1-2@m uk-width-1-1 uk-padding uk-padding-remove-vertical">
+                <h3 class="uk-text-center uk-width-1-1 uk-display-block">Current MMR</h3>
+                {#if currentMMRIssueAcknowledged}
+                    <label class="uk-flex uk-width-1-1 uk-flex-middle">
+                        <span class="uk-flex-1">Min</span>
+                        <input type="number" on:change={()=>minMMR = forceRange(minMMR, _minMMR, maxMMR, 0)}
+                               min={_minMMR} bind:value={minMMR} max={maxMMR} step="1"
+                               class="uk-form-width-small uk-form-small uk-input uk-margin-small-left"/>
+                    </label>
+                    <label class="uk-flex uk-width-1-1 uk-flex-middle">
+                        <span class="uk-flex-1">Max</span>
+                        <input type="number" on:change={()=>maxMMR = forceRange(maxMMR, minMMR, _maxMMR, 0)}
+                               min={minMMR} bind:value={maxMMR} max={_maxMMR} step="1"
+                               class="uk-form-width-small uk-form-small uk-input uk-margin-small-left"/>
+                    </label>
+                {:else}
+                    <Button on:click={()=>currentMMRIssueAcknowledged = true} class="uk-margin-auto uk-display-block">
+                        I understand that current MMR may not be accurate due to issues with the Psyonix API
+                    </Button>
+
+                {/if}
             </div>
 
         </Tile>
