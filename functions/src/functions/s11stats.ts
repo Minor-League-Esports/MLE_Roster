@@ -111,11 +111,11 @@ export async function updateS11Standings(stats: any[]) {
         }
     });
 
-    const teamsCollection = firestore.collection("teams");
+    const standingsCollection = firestore.collection("standings");
 
     await batch.writeBatches(
         new PrebatchData(
-            teamsCollection,
+            standingsCollection,
             Object.entries(teamScores).map(([teamName, standings]: [string, any])=>{
                 return {
                     name: teamName,

@@ -122,8 +122,8 @@ async function updateS11Standings(stats) {
             });
         }
     });
-    const teamsCollection = firestore.collection("teams");
-    await batch.writeBatches(new BatchModels_1.PrebatchData(teamsCollection, Object.entries(teamScores).map(([teamName, standings]) => {
+    const standingsCollection = firestore.collection("standings");
+    await batch.writeBatches(new BatchModels_1.PrebatchData(standingsCollection, Object.entries(teamScores).map(([teamName, standings]) => {
         return {
             name: teamName,
             standings: {

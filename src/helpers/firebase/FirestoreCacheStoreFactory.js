@@ -1,5 +1,5 @@
 import {cache} from "./cache.API";
-import {readable} from "svelte/store";
+import {get, readable} from "svelte/store";
 import {attachId, getFirestoreFromContext} from "../firestore";
 
 function FirestoreCacheStoreFactory({queryFn, key, preprocessFn = (a)=>a, isDoc = false, parentCollectionKey, id}={}) {
@@ -91,6 +91,13 @@ export const teamStoreFactory = () =>
             }
         }
     );
+
+export const standingsStoreFactory = () =>
+    FirestoreCacheStoreFactory({
+        queryFn: getFirestoreFromContext().collection("standings"),
+        key: "team_standings"
+    })
+
 export const seasonStoreFactory = (season) =>
     FirestoreCacheStoreFactory({
         queryFn: getFirestoreFromContext().collection(`s${season}`),
