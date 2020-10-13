@@ -63,9 +63,9 @@ export const filterPlayers = (input, order, asc, query, pageSize, pages, page, m
             break;
         default:
             output = output.sort(
-                (a, b) => a.PLAYERS.Player < b.PLAYERS.Player
+                (a, b) => a.PLAYERS.Player.toLowerCase() < b.PLAYERS.Player.toLowerCase()
                     ? -1 * mod
-                    : a.PLAYERS.Player === b.PLAYERS.Player
+                    : a.PLAYERS.Player.toLowerCase() === b.PLAYERS.Player.toLowerCase()
                         ? 0
                         : mod
             );

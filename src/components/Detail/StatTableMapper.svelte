@@ -34,8 +34,6 @@
         tabs = categories.map((category) => {
             return new TabModel(unclean(category), {category})
         })
-        console.log(categories);
-        console.log(tabs);
     }
 
 

@@ -10,10 +10,11 @@
     import CachedQuery from "../../../components/firebase/CachedQuery.svelte";
     import {matchStoreFactory, matchSeriesStoreFactory} from "../../../helpers/firebase/FirestoreCacheStoreFactory";
     import {getContext} from "svelte";
+    import BigText from "../../../components/BigText.svelte";
 
     const seasonNum = getContext("seasonNum")
     export let matchNum;
-    
+
 
     let weekMeta;
     let series;
@@ -39,7 +40,7 @@
                             <span class="uk-text-large">{match.away}</span>
                         </div>
                     </a>
-                    <Tile width="auto">at.</Tile>
+                    <Tile width="auto"><BigText>@</BigText></Tile>
                     <a use:link href="/team/{match.home}" class="{match.home.toLowerCase()} team uk-width-2-5">
                         <div class="{match.home.toLowerCase()} team">
                             <TeamLogo height="4em" includeBorder="true"/>

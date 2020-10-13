@@ -5,6 +5,7 @@
     import {sortLeaguesInOrder} from "../../helpers/MLE_META";
     import {getAllPlayers} from "../Players/playersHelpers";
     import {getContext, onMount} from "svelte";
+    import Tooltip from "../uikit/Tooltip.svelte";
 
     export let team;
     const firestore = getContext("firebase").getFirebase().firestore();
@@ -91,7 +92,7 @@
         {#if players_by_league[league].filter(p => p.PLAYERS.Role.length).length > 0}
             <Tile width="1-1" style="primary" class="uk-width-1-2@s uk-width-1-1@l uk-padding-small">
                 <h3>
-                    {league}<br class="uk-hidden@m"/>({ getSalaryTotal(league) } | { getSalaryOffset(league)}) </h3>
+                    {league}<br class="uk-hidden@m"/> ( <Tooltip title="Total Salary">{ getSalaryTotal(league) }</Tooltip> | <Tooltip title="Cap Differential">{ getSalaryOffset(league)}</Tooltip> ) </h3>
                 <ul>
                     <li>
                         <h4>Starters</h4>
