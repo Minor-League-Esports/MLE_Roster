@@ -37,7 +37,6 @@ async function writeBatches(...data) {
                 batch.data.push(new BatchModels_1.BatchData(collectionScopedData.collection, document, collectionScopedData.keypath(document), merge));
             }
             catch (_a) {
-                debugger;
                 console.log(`BATCH | (${opid}) | Error on keypath for document!`);
                 console.log(document);
             }
