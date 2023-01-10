@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "firebase": "^7.20.0",
-    "firebase-admin": "^8.10.0",
+    "firebase-admin": "^11.4.1",
     "firebase-functions": "^3.11.0",
     "google-auth-library": "^6.0.6",
     "@google-cloud/pubsub": "^2.5.0",
